@@ -111,6 +111,8 @@ extension AppDelegate: CLLocationManagerDelegate {
             date.addTimeInterval(1*60)
             if date < now {
                 
+            } else {
+                
             }
         }
         
