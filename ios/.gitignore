@@ -3,7 +3,7 @@
 # And the CLI then renames it
 
 App/build
-# App/Pods
+App/Pods
 App/public
 App/Podfile.lock
 xcuserdata
