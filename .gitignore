@@ -29,3 +29,12 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+
+/CustomPlugin/node_modules
+
+
+
+
+CustomPlugin/ios/Pods/Pods.xcodeproj/xcuserdata
+CustomPlugin/ios/Pods
+App.zip

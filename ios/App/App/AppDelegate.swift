@@ -1,0 +1,438 @@
+import UIKit
+import Capacitor
+import BackgroundTasks
+import Firebase
+import CoreLocation
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    var window: UIWindow?
+    var operationQueue = OperationQueue()
+    let gcmMessageIDKey = "gcm.message_id"
+    let locationManager = CLLocationManager()
+    let region_identifier = "scram_region_identifier"
+    var geotification: Geotification?
+    var initialLocation : CLLocation!
+    
+    func detectInvoker(launchOptions:[UIApplication.LaunchOptionsKey: Any]?) {
+        if (launchOptions != nil) {
+            FileActions().writeToFile("LaunchOptionsKey: ")
+            // Launched from push notification
+            if let remoteNotifKey = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any]  {
+                FileActions().writeToFile("remoteNotification: "+remoteNotifKey.toString!)
+            } else if let locationKey = launchOptions?[UIApplication.LaunchOptionsKey.location] as? [String: Any] {
+                FileActions().writeToFile("location: "+locationKey.toString!)
+            }
+        }
+    }
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+        self.detectInvoker(launchOptions:launchOptions)
+        
+        var arr = [""]
+        if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
+            arr = ar as! [String]
+        }
+        arr.append("didFinishLaunchingWithOptions"+Date().toString("dd MM YY hh:mm:ss"))
+        UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
+        print("didFinishLaunchingWithOptions", arr)
+        
+        //registerBackgroundTaks()
+        //UIApplication.shared.setMinimumBackgroundFetchInterval(20)
+        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        FileActions().readFromFile()
+        self.setUpFirebase(app: application)
+        self.requestPermission()
+        
+        //        self.callDummyApi1()
+        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+            self.startLocationUpdate()
+        }
+//        self.startLocationUpdate()
+        return true
+    }
+    
+    func setUpFirebase (app:UIApplication) {
+        //Access the registration token
+        Messaging.messaging().delegate = self
+        FirebaseApp.configure()
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            app.registerUserNotificationSettings(settings)
+        }
+        app.registerForRemoteNotifications()
+        
+        
+        //        Messaging.messaging().shouldEstablishDirectChannel = true
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
+            print("significantLocationChangeMonitoringAvailable")
+            locationManager.startMonitoringSignificantLocationChanges()
+        }
+        if #available(iOS 13.0, *) {
+            //            self.cancelAllPandingBGTask()
+            //            self.scheduleAppRefresh()
+            //            self.scheduleAppProcessing()
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        locationManager.stopMonitoringSignificantLocationChanges()
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        // Called when the app was launched with a url. Feel free to add additional processing here,
+        // but if you want the App API to support tracking app url opens, make sure to keep this call
+        return CAPBridge.handleOpenUrl(url, options)
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        // Called when the app was launched with an activity, including Universal Links.
+        // Feel free to add additional processing here, but if you want the App API to support
+        // tracking app url opens, make sure to keep this call
+        return CAPBridge.handleContinueActivity(userActivity, restorationHandler)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        let statusBarRect = UIApplication.shared.statusBarFrame
+        guard let touchPoint = event?.allTouches?.first?.location(in: self.window) else { return }
+        
+        if statusBarRect.contains(touchPoint) {
+            NotificationCenter.default.post(CAPBridge.statusBarTappedNotification)
+        }
+    }
+    
+    #if USE_PUSH
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        
+        print("deviceToken", deviceToken)
+        Messaging.messaging().apnsToken = deviceToken
+        
+        NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)
+    }
+    
+    #endif
+    
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("performFetchWithCompletionHandler initiated")
+        // write your code
+        //        if let newData = fetchUpdates() {
+        //           addDataToFeed(newData: newData)
+        //           completionHandler(.newData)
+        //        }
+        completionHandler(.noData)
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("didReceiveRemoteNotification", userInfo)
+        
+        //        FileActions().writeToFile(writeData:"didReceiveRemoteNotification")
+        //        FileActions().writeToFile(writeData:Date().toString("dd MM YY hh:mm:ss")+"\n")
+        //        FileActions().readFromFile()
+        
+        self.startLocationUpdate()
+        
+        //        if(application.applicationState == UIApplication.State.active) {
+        //            //app is currently active, can update badges count here
+        //            FileActions().writeToFile("UIApplicationStateActive")
+        //        }else if(application.applicationState ==  UIApplication.State.background){
+        //            //app is in background, if content-available key of your notification is set to 1, poll to your backend to retrieve data and update your interface here
+        //            FileActions().writeToFile("UIApplicationStateBackground")
+        //        }else if(application.applicationState ==  UIApplication.State.inactive){
+        //            //app is transitioning from background to foreground (user taps notification), do what you need when user taps here
+        //            FileActions().writeToFile("UIApplicationStateInactive")
+        //        }
+    }
+}
+
+
+
+extension Date {
+    func toString (_ format: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.string(from: self)
+    }
+    static func toDate (date: String, format: String)  -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.date(from: date)
+    }
+}
+
+extension String {
+    func toDate (format: String)  -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.date(from: self)
+    }
+}
+
+extension AppDelegate {
+    func registerBackgroundTaks() {
+        
+        if #available(iOS 13.0, *) {
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.ionic.example.timer.count", using: nil){task in
+                self.scheduleLocalNotification()
+                self.handleAppRefresh(task: task as! BGAppRefreshTask)
+            }
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.ionic.example.timer.count.processing", using: nil){task in
+                self.scheduleLocalNotification()
+                self.handleAppProcessing(task: task as! BGProcessingTask)
+            }
+        } else {
+            // Fallback on earlier versions
+            // UIApplication.shared.setMinimumBackgroundFetchInterval(20)
+            // UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    func handleAppProcessing (task: BGProcessingTask) {
+        self.scheduleAppProcessing()
+        let operation = BlockOperation(block: {
+            self.saveDateInStorage()
+        }) // RefreshAppContentsOperation()
+        
+        task.expirationHandler = {
+            //            operation.cancel()
+        }
+        
+        operation.completionBlock = {
+            task.setTaskCompleted(success: !operation.isCancelled)
+        }
+        
+        operationQueue.addOperation(operation)
+    }
+    
+    
+    
+    
+    @available(iOS 13.0, *)
+    func handleAppRefresh(task: BGAppRefreshTask) {
+        // Schedule a new refresh task
+        scheduleAppRefresh()
+        
+        // Create an operation that performs the main part of the background task
+        let operation = BlockOperation() // RefreshAppContentsOperation()
+        operation.addExecutionBlock { print("operation executing") }
+        operation.addExecutionBlock { self.saveDateInStorage() }
+        operationQueue.addOperations([operation], waitUntilFinished: true)
+        
+        // Provide an expiration handler for the background task
+        // that cancels the operation
+        task.expirationHandler = {
+            //            operation.cancel()
+        }
+        
+        // Inform the system that the background task is complete
+        // when the operation completes
+        operation.completionBlock = {
+            task.setTaskCompleted(success: !operation.isCancelled)
+        }
+        
+        // Start the operation
+        
+    }
+    
+    func saveDateInStorage() {
+        print("saveDateInStorage")
+        var arr = [""]
+        if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
+            arr = ar as! [String]
+        }
+        arr.append(Date().toString("dd MM YY hh:mm:ss"))
+        UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
+        print("saveDateInStorage", arr)
+    }
+    
+    @available(iOS 13.0, *)
+    func scheduleAppProcessing () {
+        let request = BGProcessingTaskRequest(identifier: "com.ionic.example.timer.count.processing")
+        request.requiresNetworkConnectivity = true // Need to true if your task need to network process. Defaults to false.
+        request.requiresExternalPower = false
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 20)
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Could not schedule image featch: \(error)")
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    func scheduleAppRefresh () {
+        let request = BGAppRefreshTaskRequest(identifier: "com.ionic.example.timer.count")
+        // Fetch no earlier than 15 minutes from now, 15 * 60
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 15)
+        
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Could not schedule app refresh: \(error)")
+        }
+    }
+    
+    func cancelAllPandingBGTask() {
+        if #available(iOS 13.0, *) {
+            BGTaskScheduler.shared.cancelAllTaskRequests()
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    
+    
+    
+}
+
+
+
+//MARK:- Notification Helper
+
+extension AppDelegate {
+    
+    func registerLocalNotification() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        
+        notificationCenter.requestAuthorization(options: options) {
+            (didAllow, error) in
+            if !didAllow {
+                print("User has declined notifications")
+            }
+        }
+    }
+    
+    func scheduleLocalNotification() {
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.getNotificationSettings { (settings) in
+            if settings.authorizationStatus == .authorized {
+                self.fireNotification()
+            }
+        }
+    }
+    
+    func fireNotification() {
+        // Create Notification Content
+        let notificationContent = UNMutableNotificationContent()
+        
+        // Configure Notification Content
+        notificationContent.title = "Bg"
+        notificationContent.body = "BG Notifications."
+        
+        // Add Trigger
+        let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.0, repeats: false)
+        
+        // Create Notification Request
+        let notificationRequest = UNNotificationRequest(identifier: "local_notification", content: notificationContent, trigger: notificationTrigger)
+        
+        // Add Request to User Notification Center
+        UNUserNotificationCenter.current().add(notificationRequest) { (error) in
+            if let error = error {
+                print("Unable to Add Notification Request (\(error), \(error.localizedDescription))")
+            }
+        }
+    }
+    
+}
+
+extension AppDelegate : MessagingDelegate {
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("Firebase registration token: \(fcmToken)")
+        
+        let dataDict:[String: String] = ["token": fcmToken]
+        NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
+        // TODO: If necessary send token to application server.
+        // Note: This callback is fired at each app startup and whenever a new token is generated.
+    }
+    
+    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
+        print("messaging", messaging.fcmToken)
+    }
+}
+
+@available(iOS 10, *)
+extension AppDelegate : UNUserNotificationCenterDelegate {
+    
+    // Receive displayed notifications for iOS 10 devices.
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+        
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        // Print message ID.
+        if let messageID = userInfo[gcmMessageIDKey] {
+            debugPrint("Message ID: \(messageID)")
+        }
+        debugPrint("====2====\(userInfo)")
+        
+        // Change this to your preferred presentation option
+        completionHandler([])
+    }
+    
+    //TAP on notification hanlder
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        // Print message ID.
+        if let messageID = userInfo[gcmMessageIDKey] {
+            debugPrint("Message ID: \(messageID)")
+        }
+        //Helpshift implementation
+        
+        
+        // Print full message.
+        debugPrint("=====3===\(userInfo)")
+        if let payload = userInfo["aps"] as? [AnyHashable: Any] {
+            if (payload["alert"] as? [AnyHashable: Any]) != nil{
+                if let tripId = userInfo[""] as? String {
+                }
+            }
+        }
+        
+        
+        
+        completionHandler()
+    }
+    
+}
