@@ -1,0 +1,6 @@
+framework module CustomPlugin {
+  umbrella header "CustomPlugin-umbrella.h"
+
+  export *
+  module * { export * }
+}
