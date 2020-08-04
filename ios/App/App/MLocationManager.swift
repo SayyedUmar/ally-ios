@@ -28,6 +28,14 @@ class Geotification {
 }
 
 extension AppDelegate {
+    
+    func getMinutesDifferenceFromTwoDates(start: Date, end: Date) -> Int {
+        let diff = Int(end.timeIntervalSince1970 - start.timeIntervalSince1970)
+        let hours = diff / 3600
+        let minutes = (diff - hours * 3600) / 60
+        return minutes
+    }
+    
     func requestPermission () {
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.requestAlwaysAuthorization()
@@ -83,7 +91,7 @@ extension AppDelegate {
             print("monitorRegionAtLocation")
             let maxDistance = locationManager.maximumRegionMonitoringDistance
             let region = CLCircularRegion(center: center,
-                                          radius: 50/*in meters*/, identifier: identifier)
+                                          radius: 100/*in meters*/, identifier: identifier)
             region.notifyOnEntry = true
             region.notifyOnExit = true
             locationManager.startMonitoring(for: region)
@@ -105,19 +113,20 @@ extension AppDelegate: CLLocationManagerDelegate {
 //        self.locationManager.stopUpdatingLocation()
 //        let lastLocation = locations.last!
         
-        if let lastDate = UserDefaults.standard.value(forKey: "lastLocationTime") as? String {
+        if var lastDate = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
             let now = Date()
-            var date = lastDate.toDate(format: "dd MM yyyy, HH:mm:ss")!
-            date.addTimeInterval(1*60)
-            if date < now {
-                
+            lastDate.addTimeInterval(10) // in seconds
+            if lastDate < now {
+                print("date is less than now")
+                UserDefaults.standard.set(now, forKey: "lastLocationTime")
+                updateLocation(manager, didUpdateLocations: locations)
             } else {
-                
+//                print("date is greater than now")
             }
         }
         
         //locationManager.allowDeferredLocationUpdates(untilTraveled: 0, timeout: 5)
-        updateLocation(manager, didUpdateLocations: locations)
+        
 
     }
     func updateLocation (_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -147,7 +156,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             //let identifier = region.identifier
             //self.region = region
             FileActions().writeToFile("region exited: \(region.center.latitude):\(region.center.longitude)")
-            stopMonitoring(geotification: Geotification(identifier: region.identifier, cord: region.center))
+            //stopMonitoring(geotification: Geotification(identifier: region.identifier, cord: region.center))
             //self.startLocationUpdate()
             // triggerTaskAssociatedWithRegionIdentifier(regionID: identifier)
         }
@@ -163,6 +172,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             print("state: inside")
         } else if state == CLRegionState.outside {
             print("state: outside")
+            FileActions().writeToFile("region exited: state: outside")
         } else if state == CLRegionState.unknown{
             print("state: unknown")
         }
@@ -189,6 +199,8 @@ extension Data {
     var toString: String {
         return String(decoding: self, as: UTF8.self)
     }
+    
+   
 }
 
 extension Dictionary {

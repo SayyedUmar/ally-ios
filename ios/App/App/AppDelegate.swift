@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
             arr = ar as! [String]
         }
-        arr.append("didFinishLaunchingWithOptions"+Date().toString("dd MM YY hh:mm:ss"))
+//        arr.append("didFinishLaunchingWithOptions"+Date().toString("dd MM YY hh:mm:ss"))
         UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
         print("didFinishLaunchingWithOptions", arr)
         
@@ -47,10 +47,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-            self.startLocationUpdate()
+//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+//            self.startLocationUpdate()
+//        }
+        if let _ = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
+            
+        } else {
+            UserDefaults.standard.set(Date(), forKey: "lastLocationTime")
         }
-//        self.startLocationUpdate()
+        self.startLocationUpdate()
+        self.subscribeBusEvents()
         return true
     }
     

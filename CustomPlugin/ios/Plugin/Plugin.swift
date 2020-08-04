@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+//import UIKit
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -11,14 +12,17 @@ public class CustomPlugin: CAPPlugin {
     var timer: Timer!
     @objc func echo(_ call: CAPPluginCall) {
 //        self.call = call
-        if timer == nil {setTimer()}
+//        if timer == nil {setTimer()}
 //        let value = call.getString("value") ?? ""
 //        let person = call.getObject("person")
 //        print("person", person)
         call.success([
             "value": Date().toString("dd MM YY hh:mm:ss")
         ])
-        
+        NotificationCenter.default.post(
+        name: NSNotification.Name.init("CAPPluginCall_umar"),
+        object: self,
+        userInfo: ["key": "value"])
     }
     
     func setTimer () {

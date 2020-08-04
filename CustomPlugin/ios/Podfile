@@ -9,6 +9,7 @@ end
 
 target 'Plugin' do
   capacitor_pods
+  # pod 'SwiftEventBus', :tag => '5.0.1', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
 end
 
 target 'PluginTests' do

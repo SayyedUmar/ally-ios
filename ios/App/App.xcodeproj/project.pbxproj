@@ -14,7 +14,7 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
-		523DFCDE24D4370000CB21B2 /* FileActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523DFCDD24D4370000CB21B2 /* FileActions.swift */; };
+		522DB20C24D96B2C00AAD22B /* FileActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522DB20B24D96B2C00AAD22B /* FileActions.swift */; };
 		528C758E24CF03F0001CA6C2 /* operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528C758D24CF03F0001CA6C2 /* operation.swift */; };
 		528C759024D030C3001CA6C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 528C758F24D030C3001CA6C2 /* GoogleService-Info.plist */; };
 		528C759224D2945D001CA6C2 /* MLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528C759124D2945D001CA6C2 /* MLocationManager.swift */; };
@@ -32,7 +32,7 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = SOURCE_ROOT; };
-		523DFCDD24D4370000CB21B2 /* FileActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileActions.swift; path = "../../App 2/App/FileActions.swift"; sourceTree = "<group>"; };
+		522DB20B24D96B2C00AAD22B /* FileActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileActions.swift; sourceTree = "<group>"; };
 		528C758D24CF03F0001CA6C2 /* operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = operation.swift; sourceTree = "<group>"; };
 		528C758F24D030C3001CA6C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		528C759124D2945D001CA6C2 /* MLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLocationManager.swift; sourceTree = "<group>"; };
@@ -87,8 +87,8 @@
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				528C759324D29496001CA6C2 /* ViewController.swift */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				522DB20B24D96B2C00AAD22B /* FileActions.swift */,
 				528C758D24CF03F0001CA6C2 /* operation.swift */,
-				523DFCDD24D4370000CB21B2 /* FileActions.swift */,
 				528C759124D2945D001CA6C2 /* MLocationManager.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
@@ -226,7 +226,7 @@
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				528C758E24CF03F0001CA6C2 /* operation.swift in Sources */,
 				528C759424D29496001CA6C2 /* ViewController.swift in Sources */,
-				523DFCDE24D4370000CB21B2 /* FileActions.swift in Sources */,
+				522DB20C24D96B2C00AAD22B /* FileActions.swift in Sources */,
 				528C759224D2945D001CA6C2 /* MLocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
