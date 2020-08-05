@@ -90,7 +90,7 @@ extension AppDelegate {
             "altitude": location.altitude,
             "accuracy": location.horizontalAccuracy,
             "altitudeAccuracy": location.verticalAccuracy,
-            "direction": self.heading.magneticHeading,
+            "direction": 0,
             "speed": location.speed,
             "satellite": 0,
             "csq": 0,
@@ -165,6 +165,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
+                callServerAPI(location: locations.last!)
             } else {
 //                print("date is greater than now")
             }
