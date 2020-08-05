@@ -72,6 +72,7 @@ extension AppDelegate {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = getPostData(location: location).toData
+        print("location- ", location.coordinate.latitude, location.coordinate.longitude)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
