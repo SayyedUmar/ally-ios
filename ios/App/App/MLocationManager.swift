@@ -87,7 +87,7 @@ extension AppDelegate {
         return [[
             "victimId": "B08FFE14-1AB0-4321-A46D-98E8FC74AA71",
             "deviceImei": "bcf7b96dbdefbde1",
-            "timestamp": location.timestamp.toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "timestamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "latitude": location.coordinate.latitude,
             "longitude": location.coordinate.longitude,
             "altitude": location.altitude,
@@ -102,7 +102,7 @@ extension AppDelegate {
             "address": "address",
             "locationMode": "A",
             "eventType": "Location",
-            "cacheTimeStamp": Date().toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "cacheTimeStamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
             "batteryLevel": 93, //UIDevice.current.batteryLevel,
@@ -163,10 +163,10 @@ extension AppDelegate: CLLocationManagerDelegate {
             let now = Date()
             lastDate.addTimeInterval(10) // in seconds
             if lastDate < now {
-                print("date is less than now")
+                print("date is less than now", Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"))
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
-                callServerAPI(location: locations.last!)
+                //callServerAPI(location: locations.last!)
             } else {
 //                print("date is greater than now")
             }

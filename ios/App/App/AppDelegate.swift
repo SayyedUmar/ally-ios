@@ -197,6 +197,13 @@ extension Date {
         formatter.dateFormat = format
         return formatter.string(from: self)
     }
+    func toUTCString (_ format: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        return dateFormatter.string(from: self)
+    }
+   
     static func toDate (date: String, format: String)  -> Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = format
