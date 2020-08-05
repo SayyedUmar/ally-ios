@@ -166,7 +166,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
-                //callServerAPI(location: locations.last!)
+                callServerAPI(location: locations.last!)
             } else {
 //                print("date is greater than now")
             }
