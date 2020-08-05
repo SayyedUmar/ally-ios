@@ -79,7 +79,7 @@ extension AppDelegate {
     
     func stopMonitoring(geotification: Geotification) {
         for region in locationManager.monitoredRegions {
-            print("monitorRegionAtLocation", region.identifier)
+            print("stopMonitoring", region.identifier)
             guard let circularRegion = region as? CLCircularRegion,
                 circularRegion.identifier == geotification.identifier else { continue }
             locationManager.stopMonitoring(for: circularRegion)
@@ -88,7 +88,7 @@ extension AppDelegate {
     
     func monitorRegionAtLocation (center: CLLocationCoordinate2D, identifier: String) {
         if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) {
-            print("monitorRegionAtLocation")
+            print("monitorRegionAtLocation: \(center.latitude) - \(center.longitude)")
             let maxDistance = locationManager.maximumRegionMonitoringDistance
             let region = CLCircularRegion(center: center,
                                           radius: 100/*in meters*/, identifier: identifier)
