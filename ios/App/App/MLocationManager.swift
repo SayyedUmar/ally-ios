@@ -79,8 +79,6 @@ extension AppDelegate {
     
     func stopMonitoring(geotification: Geotification) {
         for region in locationManager.monitoredRegions {
-            
-            
             guard let circularRegion = region as? CLCircularRegion,
                 circularRegion.identifier == geotification.identifier else { continue }
             print("stopRegionMonitoring: \(circularRegion.center.latitude) - \(circularRegion.center.longitude)")
@@ -100,6 +98,13 @@ extension AppDelegate {
             region.notifyOnExit = true
             locationManager.startMonitoring(for: region)
         }
+    }
+    
+    func userExitedRegion (region: CLCircularRegion) {
+        FileActions().writeToFile("region exited: \(region.center.latitude):\(region.center.longitude)")
+        stopMonitoring(geotification: Geotification(identifier: region.identifier, cord: region.center))
+        self.geotification = nil
+        self.startLocationUpdate()
     }
     
 }
@@ -159,10 +164,9 @@ extension AppDelegate: CLLocationManagerDelegate {
             
             //let identifier = region.identifier
             //self.region = region
-            FileActions().writeToFile("region exited: \(region.center.latitude):\(region.center.longitude)")
-            //stopMonitoring(geotification: Geotification(identifier: region.identifier, cord: region.center))
-            //self.startLocationUpdate()
-            // triggerTaskAssociatedWithRegionIdentifier(regionID: identifier)
+            userExitedRegion(region: region)
+            
+//             triggerTaskAssociatedWithRegionIdentifier(regionID: identifier)
         }
     }
     
@@ -176,7 +180,10 @@ extension AppDelegate: CLLocationManagerDelegate {
             print("state: inside")
         } else if state == CLRegionState.outside {
             print("state: outside")
-            FileActions().writeToFile("region exited: state: outside")
+            guard let circularRegion = region as? CLCircularRegion else { return }
+            userExitedRegion(region: circularRegion)
+//            FileActions().writeToFile("region exited: \(circularRegion.center.latitude):\(circularRegion.center.longitude)")
+//            stopMonitoring(geotification: Geotification(identifier: region.identifier, cord: circularRegion.center))
         } else if state == CLRegionState.unknown{
             print("state: unknown")
         }
