@@ -90,7 +90,7 @@ extension AppDelegate {
             "altitude": location.altitude,
             "accuracy": location.horizontalAccuracy,
             "altitudeAccuracy": location.verticalAccuracy,
-            "direction": "direction.",
+            "direction": self.heading.magneticHeading,
             "speed": location.speed,
             "satellite": 0,
             "csq": 0,
@@ -102,11 +102,15 @@ extension AppDelegate {
             "cacheTimeStamp": location.timestamp.toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
-            "batteryLevel": 93,
+            "batteryLevel": 93, //UIDevice.current.batteryLevel,
             "isBatteryCharging": false,
         ]
         
         
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        self.heading = newHeading
     }
     
     func stopMonitoring(geotification: Geotification) {
