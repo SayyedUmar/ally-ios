@@ -78,7 +78,7 @@ extension AppDelegate {
                 let data = data, error == nil
                 else { return }
             print("after response")
-            print("data = ",data.toJSON())
+            print("statusCode = ", httpURLResponse.statusCode )
         }.resume()
     }
     
