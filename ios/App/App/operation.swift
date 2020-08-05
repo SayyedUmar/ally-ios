@@ -34,9 +34,9 @@ extension AppDelegate {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             
-            mailComposer.setToRecipients(["john@stackoverflow.com", "mrmins@mydomain.com", "anotheremail@email.com"])
-            mailComposer.setSubject("Cotización")
-            mailComposer.setMessageBody("My body message", isHTML: true)
+            mailComposer.setToRecipients(["usayyed@xpanxion.com"])
+            mailComposer.setSubject("POC Log file")
+            mailComposer.setMessageBody("Hey FYI.", isHTML: true)
             
             if let fileData = data {
                 mailComposer.addAttachmentData(fileData, mimeType: "application/pdf", fileName: "MyFileName.txt")
