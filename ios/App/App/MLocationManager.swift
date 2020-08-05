@@ -163,7 +163,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             let now = Date()
             lastDate.addTimeInterval(10) // in seconds
             if lastDate < now {
-                print("date is less than now", Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"))
+                print("date is less than now"))
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
                 //callServerAPI(location: locations.last!)
