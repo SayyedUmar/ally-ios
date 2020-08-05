@@ -72,6 +72,7 @@ extension AppDelegate {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = getPostData(location: location).toData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                 let data = data, error == nil
@@ -268,8 +269,7 @@ extension Dictionary {
 extension Array {
     var toData: Data? {
 //        return NSKeyedArchiver.archivedData(withRootObject: self)
-        guard let data = try? JSONSerialization.data(withJSONObject: self,
-        options: [.prettyPrinted]) else { return nil }
+        guard let data = try? JSONSerialization.data(withJSONObject: self) else { return nil }
         return data
     }
 }
