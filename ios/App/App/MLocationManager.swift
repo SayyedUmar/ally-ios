@@ -76,12 +76,13 @@ extension AppDelegate {
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                 let data = data, error == nil
                 else { return }
+            print("after response")
             print("data = ",data.toJSON())
         }.resume()
     }
     
-    func getPostData (location: CLLocation) -> [String: Any]{
-        return  [
+    func getPostData (location: CLLocation) -> [[String: Any]] {
+        return [[
             "victimId": "B08FFE14-1AB0-4321-A46D-98E8FC74AA71",
             "deviceImei": "bcf7b96dbdefbde1",
             "timestamp": location.timestamp.toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
@@ -94,19 +95,17 @@ extension AppDelegate {
             "speed": location.speed,
             "satellite": 0,
             "csq": 0,
-            "isMoving": false,
-            "fix": 0,
+            "isMoving": false, //calculated based on activityType
+            "fix": 0, //zero
             "address": "address",
             "locationMode": "A",
-            "eventType": "Heartbeat",
-            "cacheTimeStamp": location.timestamp.toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "eventType": "Location",
+            "cacheTimeStamp": Date().toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
             "batteryLevel": 93, //UIDevice.current.batteryLevel,
             "isBatteryCharging": false,
-        ]
-        
-        
+        ]]
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
@@ -165,7 +164,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
-                //callServerAPI(location: locations.last!)
+                callServerAPI(location: locations.last!)
             } else {
 //                print("date is greater than now")
             }
@@ -262,6 +261,15 @@ extension Dictionary {
         guard let data = try? JSONSerialization.data(withJSONObject: self,
                     options: [.prettyPrinted]) else { return nil }
 
+        return data
+    }
+}
+
+extension Array {
+    var toData: Data? {
+//        return NSKeyedArchiver.archivedData(withRootObject: self)
+        guard let data = try? JSONSerialization.data(withJSONObject: self,
+        options: [.prettyPrinted]) else { return nil }
         return data
     }
 }
