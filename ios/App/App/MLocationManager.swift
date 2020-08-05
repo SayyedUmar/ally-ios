@@ -67,14 +67,46 @@ extension AppDelegate {
             
         }.resume()
     }
-    func callDummyApi1 () {
-        let url = URL(string: "https://jsonplaceholder.typicode.com/todos/1")!
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+    func callServerAPI (location: CLLocation) {
+        let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = getPostData(location: location).toData
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                 let data = data, error == nil
                 else { return }
             print("data = ",data.toJSON())
         }.resume()
+    }
+    
+    func getPostData (location: CLLocation) -> [String: Any]{
+        return  [
+            "victimId": "B08FFE14-1AB0-4321-A46D-98E8FC74AA71",
+            "deviceImei": "bcf7b96dbdefbde1",
+            "timestamp": location.timestamp.toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "latitude": location.coordinate.latitude,
+            "longitude": location.coordinate.longitude,
+            "altitude": location.altitude,
+            "accuracy": location.horizontalAccuracy,
+            "altitudeAccuracy": location.verticalAccuracy,
+            "direction": "direction.",
+            "speed": location.speed,
+            "satellite": 0,
+            "csq": 0,
+            "isMoving": false,
+            "fix": 0,
+            "address": "address",
+            "locationMode": "A",
+            "eventType": "Heartbeat",
+            "cacheTimeStamp": location.timestamp.toString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "activityType": "activityType",
+            "activityConfidence": -1,
+            "batteryLevel": 93,
+            "isBatteryCharging": false,
+        ]
+        
+        
     }
     
     func stopMonitoring(geotification: Geotification) {
@@ -217,10 +249,14 @@ extension Data {
 extension Dictionary {
     var toString: String? {
         guard let theJSONData = try? JSONSerialization.data(withJSONObject: self,
-                                                            options: [.prettyPrinted]) else {
-            return nil
-        }
+        options: [.prettyPrinted]) else { return nil }
 
         return String(data: theJSONData, encoding: .utf8)
+    }
+    var toData: Data? {
+        guard let data = try? JSONSerialization.data(withJSONObject: self,
+                    options: [.prettyPrinted]) else { return nil }
+
+        return data
     }
 }
