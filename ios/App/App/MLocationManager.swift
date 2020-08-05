@@ -43,7 +43,7 @@ extension AppDelegate {
     
     func startLocationUpdate(){
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.activityType = CLActivityType.automotiveNavigation
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.allowsBackgroundLocationUpdates = true
@@ -161,7 +161,7 @@ extension AppDelegate: CLLocationManagerDelegate {
         
         if var lastDate = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
             let now = Date()
-            lastDate.addTimeInterval(10) // in seconds
+            lastDate.addTimeInterval(1 * 60) // in seconds
             if lastDate < now {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
@@ -180,8 +180,8 @@ extension AppDelegate: CLLocationManagerDelegate {
         let lastLocation = locations.last!
         if self.geotification == nil {
             self.geotification = Geotification(identifier: self.region_identifier, cord: lastLocation.coordinate)
-            //self.stopMonitoring(geotification: Geotification(identifier: self.region_identifier, cord: locationObj.coordinate))
-            self.monitorRegionAtLocation(center: lastLocation.coordinate, identifier: self.region_identifier)
+//            self.stopMonitoring(geotification: Geotification(identifier: self.region_identifier, cord: lastLocation.coordinate))
+//            self.monitorRegionAtLocation(center: lastLocation.coordinate, identifier: self.region_identifier)
             initialLocation = lastLocation
         }
         let distance = lastLocation.distance(from: initialLocation)
@@ -209,7 +209,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        print("didStartMonitoringFor")
+        //print("didStartMonitoringFor")
         manager.requestState(for: region)
     }
     
