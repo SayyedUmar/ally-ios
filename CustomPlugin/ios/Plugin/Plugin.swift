@@ -28,7 +28,7 @@ public class CustomPlugin: CAPPlugin {
         SwiftEventBus.onMainThread(self, name: "onLocationCapture") { result in
             guard let result = result, let userInfo = result.userInfo as? [String : Any] else {return}
             print("onLocationCapture", userInfo)
-            self.notifyListeners("onLocationCapture", data: ["date": Date().toString("dd MM YY hh:mm:ss"),
+            self.notifyListeners("onLocationCapture", data: ["date": Date().toString("dd MM yyyy hh:mm:ss"),
                                                          "lat": userInfo["lat"] as! Double, "lng": userInfo["lng"] as! Double])
         }
     }
@@ -41,7 +41,7 @@ public class CustomPlugin: CAPPlugin {
     
     @objc func resolve() {
         DispatchQueue.global().async {
-            self.notifyListeners("myPluginEvent", data: ["value": Date().toString("dd MM YY hh:mm:ss")])
+            self.notifyListeners("myPluginEvent", data: ["value": Date().toString("dd MM yyyy hh:mm:ss")])
         }
         
     }
