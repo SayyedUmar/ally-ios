@@ -24,6 +24,13 @@ public class CustomPlugin: CAPPlugin {
                  name: NSNotification.Name.init(value),
                  object: self,
                  userInfo: person)
+        
+        SwiftEventBus.onMainThread(self, name: "onLocationCapture") { result in
+            guard let result = result, let userInfo = result.userInfo as? [String : Any] else {return}
+            print("onLocationCapture", userInfo)
+            self.notifyListeners("onLocationCapture", data: ["date": Date().toString("dd MM YY hh:mm:ss"),
+                                                         "lat": userInfo["lat"] as! Double, "lng": userInfo["lng"] as! Double])
+        }
     }
     
     func setTimer () {
@@ -40,6 +47,7 @@ public class CustomPlugin: CAPPlugin {
     }
     
     deinit  {
+        
         print("CAPPluginCall deinit")
     }
 

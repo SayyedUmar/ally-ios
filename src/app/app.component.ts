@@ -19,6 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
   person_list: Person[] = []
   selectedUser: Person
   ifMonitoringStarted = false
+  lat: number
+  lng: number
+  date: string
 
   constructor(
     private platform: Platform,
@@ -58,8 +61,13 @@ export class AppComponent implements OnInit, OnDestroy {
   myPluginEventListener
   ngOnInit () {
     console.log('onInit')
-    this.myPluginEventListener = CustomPlugin.addListener('myPluginEvent', (info: any) => {
-      this.showValue(info)
+    this.myPluginEventListener = CustomPlugin.addListener('onLocationCapture', (info: any) => {
+      //this.showValue(info)
+      console.log('onLocationCapture', info)
+      this.date = info.date
+      this.lat = info.lat
+      this.lng = info.lng
+      this.cdRef.detectChanges();
     })
   }
 

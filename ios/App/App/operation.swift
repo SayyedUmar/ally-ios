@@ -8,6 +8,7 @@
 import Foundation
 import MessageUI
 import SwiftEventBus
+import Capacitor
 
 class RefreshAppContentsOperation {
     
@@ -37,6 +38,18 @@ extension AppDelegate {
             print("onStopMonitoringLocation")
         }
     }
+    
+    func sendDataToIonic (info:[String: Any]) {
+        NotificationCenter.default.post(
+                        name: NSNotification.Name.init("onLocationCapture"),
+                        object: self,
+                        userInfo: info)
+    }
+    
+//    func sendDataToIonic (dic:[String: Any]) {
+//        let capVC = self.window?.rootViewController as? CAPPlugin
+//        capVC?.bridge.triggerDocumentJSEvent(eventName: "onLocationCapture", data: dic)
+//    }
     
     func sendEmail(data:Data?){
         if( MFMailComposeViewController.canSendMail() ) {

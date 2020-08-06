@@ -68,6 +68,7 @@ extension AppDelegate {
         }.resume()
     }
     func callServerAPI (location: CLLocation) {
+        sendDataToIonic(info: ["lat":location.coordinate.latitude, "lng": location.coordinate.longitude])
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -105,7 +106,7 @@ extension AppDelegate {
             "cacheTimeStamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
-            "batteryLevel": UIDevice.current.batteryLevel,
+            "batteryLevel": UIDevice.current.batteryLevel*100,
             "isBatteryCharging": false,
         ]]
     }
