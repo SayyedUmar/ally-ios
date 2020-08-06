@@ -17,15 +17,24 @@ class RefreshAppContentsOperation {
 extension AppDelegate {
     
     func subscribeBusEvents () {
-        SwiftEventBus.onMainThread(self, name: "CAPPluginCall_umar") { result in
-            // UI thread
-            //print("CAPPluginCall_umar")
+        SwiftEventBus.onMainThread(self, name: "emailLogFile") { result in
+            print("emailLogFile")
             let url = FileActions().getFilePath()
-            
             do {
                 try self.sendEmail(data: Data(contentsOf: url))
             } catch {print(error.localizedDescription)}
-            
+        }
+        
+        SwiftEventBus.onMainThread(self, name: "onStartMonitoringLocation") { result in
+            self.startLocationUpdate()
+            guard let result = result, let userInfo = result.userInfo as? [String : Any] else {return}
+            self.person = Person (dict: userInfo)
+            print("onStartMonitoringLocation", result)
+        }
+        
+        SwiftEventBus.onMainThread(self, name: "onStopMonitoringLocation") { result in
+            self.locationManager.stopUpdatingLocation()
+            print("onStopMonitoringLocation")
         }
     }
     
@@ -59,5 +68,16 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
             rootVC.dismiss(animated: true, completion: nil)
         }
         
+    }
+}
+
+class Person {
+    let name: String
+    let victimId: String
+    let deviceId: String
+    init (dict: [String: Any]) {
+        self.name = dict["name"] as! String
+        self.victimId = dict["victimId"] as! String
+        self.deviceId = dict["deviceId"] as! String
     }
 }

@@ -13,16 +13,17 @@ public class CustomPlugin: CAPPlugin {
     @objc func echo(_ call: CAPPluginCall) {
 //        self.call = call
 //        if timer == nil {setTimer()}
-//        let value = call.getString("value") ?? ""
-//        let person = call.getObject("person")
-//        print("person", person)
+        let value = call.getString("value") ?? ""
+        let person = call.getObject("person")
+        
         call.success([
             "value": Date().toString("dd MM YY hh:mm:ss")
         ])
+        
         NotificationCenter.default.post(
-        name: NSNotification.Name.init("CAPPluginCall_umar"),
-        object: self,
-        userInfo: ["key": "value"])
+                 name: NSNotification.Name.init(value),
+                 object: self,
+                 userInfo: person)
     }
     
     func setTimer () {

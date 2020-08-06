@@ -18,18 +18,29 @@
             </ion-card-header>
             <ion-card-content>
               <ion-item>
-                <ion-label position="floating">Username</ion-label>
-                <ion-input name="expense_reason" [(ngModel)]="inputText"></ion-input>
+                <!-- <ion-label position="floating">Username</ion-label>
+                <ion-input name="expense_reason" [(ngModel)]="inputText"></ion-input> -->
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Password</ion-label>
-                <ion-input type="number"></ion-input>
+                <!-- <ion-label position="floating">Password</ion-label>
+                <ion-input type="number"></ion-input> -->
+                <ion-label>User</ion-label>
+                <ion-select placeholder="Select Your Name" [(ngModel)]="selectedUser">
+                  <ion-select-option *ngFor="let item of person_list" [value]="item">{{item.name}}</ion-select-option>
+                </ion-select>
               </ion-item>
-              <ion-button (click)="onCLick()" fill="outline" color="danger">
+              <!-- <ion-button (click)="onCLick()" fill="outline" color="danger">
                 Clear
+              </ion-button> -->
+              <ion-button (click)="onStartMonitoringLocation()" *ngIf="!ifMonitoringStarted">
+                Start Location Monitoring  
               </ion-button>
-              <ion-button (click)="onCLick()">
-                Login  
+              <ion-button (click)="onStopMonitoringLocation()" *ngIf="ifMonitoringStarted">
+                Stop Location Monitoring  
+              </ion-button>
+
+              <ion-button (click)="emailLogFile()">
+                Email
               </ion-button>
             </ion-card-content>
           </ion-card>

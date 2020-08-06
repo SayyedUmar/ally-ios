@@ -85,8 +85,8 @@ extension AppDelegate {
     
     func getPostData (location: CLLocation) -> [[String: Any]] {
         return [[
-            "victimId": "B08FFE14-1AB0-4321-A46D-98E8FC74AA71",
-            "deviceImei": "bcf7b96dbdefbde1",
+            "victimId": self.person.victimId,
+            "deviceImei": self.person.deviceId,
             "timestamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "latitude": location.coordinate.latitude,
             "longitude": location.coordinate.longitude,
@@ -105,7 +105,7 @@ extension AppDelegate {
             "cacheTimeStamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
-            "batteryLevel": 93, //UIDevice.current.batteryLevel,
+            "batteryLevel": UIDevice.current.batteryLevel,
             "isBatteryCharging": false,
         ]]
     }
@@ -180,13 +180,13 @@ extension AppDelegate: CLLocationManagerDelegate {
         let lastLocation = locations.last!
         if self.geotification == nil {
             self.geotification = Geotification(identifier: self.region_identifier, cord: lastLocation.coordinate)
-//            self.stopMonitoring(geotification: Geotification(identifier: self.region_identifier, cord: lastLocation.coordinate))
-//            self.monitorRegionAtLocation(center: lastLocation.coordinate, identifier: self.region_identifier)
+            self.stopMonitoring(geotification: Geotification(identifier: self.region_identifier, cord: lastLocation.coordinate))
+            self.monitorRegionAtLocation(center: lastLocation.coordinate, identifier: self.region_identifier)
             initialLocation = lastLocation
         }
         let distance = lastLocation.distance(from: initialLocation)
         let str = String(format: "%.1f%@", distance > 1000 ? distance/1000 : distance, distance > 1000 ? "km" : "m")
-        print("didUpdateLocations - ", str)
+        print("didUpdateLocations- ", str)
         
         //        UIApplication.shared.applicationState == .active {
         //            manager.stopUpdatingLocation()
@@ -199,9 +199,6 @@ extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         print("didExitRegion")
         if let region = region as? CLCircularRegion {
-            
-            //let identifier = region.identifier
-            //self.region = region
             userExitedRegion(region: region)
             
 //             triggerTaskAssociatedWithRegionIdentifier(regionID: identifier)
