@@ -38,6 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
             arr = ar as! [String]
         }
+        if let _ = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
+            
+        } else {
+            UserDefaults.standard.set(Date(), forKey: "lastLocationTime")
+        }
+
 //        arr.append("didFinishLaunchingWithOptions"+Date().toString("dd MM YY hh:mm:ss"))
         UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
         print("didFinishLaunchingWithOptions", arr)
