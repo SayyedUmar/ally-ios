@@ -76,6 +76,8 @@ extension AppDelegate {
         #endif
         print("device is real")
         
+        FileActions1().writeToFile("location captued lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude)")
+        
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
