@@ -430,7 +430,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         //sdebugPrint("didReceiveUserNotificationCenter\(userInfo)")
 
         // Change this to your preferred presentation option
-          completionHandler([.alert,.sound])
+        completionHandler([.alert,.sound])
     }
     
     //TAP on notification hanlder
@@ -453,8 +453,6 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                 }
             }
         }
-        
-        
         
         completionHandler()
     }
