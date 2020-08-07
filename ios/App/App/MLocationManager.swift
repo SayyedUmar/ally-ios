@@ -121,8 +121,8 @@ extension AppDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         direction = newHeading
-        print("direction = magneticHeading:\(direction.magneticHeading), trueHeading:\(direction.trueHeading))")
-        scheduleLocalNotification(title: "Ally", body: "New Directon: \(direction.trueHeading):\(direction.magneticHeading)", info: nil)
+        //print("direction = magneticHeading:\(direction.magneticHeading), trueHeading:\(direction.trueHeading))")
+        //scheduleLocalNotification(title: "Ally", body: "New Directon: \(direction.trueHeading):\(direction.magneticHeading)", info: nil)
     }
     
     func stopMonitoring(geotification: Geotification) {
