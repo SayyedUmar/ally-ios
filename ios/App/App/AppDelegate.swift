@@ -50,10 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-//            //self.startLocationUpdate()
-//            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
-//        }
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+            //self.startLocationUpdate()
+            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
+        }
 //        self.startLocationUpdate()
         self.subscribeBusEvents()
         return true
@@ -229,11 +229,11 @@ extension AppDelegate {
         
         if #available(iOS 13.0, *) {
             BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.ionic.example.timer.count", using: nil){task in
-                self.scheduleLocalNotification(title: "Ally", body: "App Refreshed- BGAppRefreshTask", info: nil)
+                //self.scheduleLocalNotification(title: "Ally", body: "App Refreshed- BGAppRefreshTask", info: nil)
                 self.handleAppRefresh(task: task as! BGAppRefreshTask)
             }
             BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.ionic.example.timer.count.processing", using: nil){task in
-                self.scheduleLocalNotification(title: "Ally", body: "App Refreshed- BGProcessingTask", info: nil)
+                //self.scheduleLocalNotification(title: "Ally", body: "App Refreshed- BGProcessingTask", info: nil)
                 self.handleAppProcessing(task: task as! BGProcessingTask)
             }
         } else {
@@ -380,6 +380,7 @@ extension AppDelegate {
         // Configure Notification Content
         notificationContent.title = title
         notificationContent.body = body
+        
         if let info = info {
             notificationContent.userInfo = info
         }
@@ -387,8 +388,9 @@ extension AppDelegate {
         // Add Trigger
         let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.0, repeats: false)
         
+        
         // Create Notification Request
-        let notificationRequest = UNNotificationRequest(identifier: "local_notification", content: notificationContent, trigger: notificationTrigger)
+        let notificationRequest = UNNotificationRequest(identifier: "local_notification"+UUID().uuidString, content: notificationContent, trigger: notificationTrigger)
         
         // Add Request to User Notification Center
         UNUserNotificationCenter.current().add(notificationRequest) { (error) in

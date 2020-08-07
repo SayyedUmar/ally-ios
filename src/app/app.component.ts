@@ -37,7 +37,6 @@ export class AppComponent implements OnInit, OnDestroy {
       new Person('Brijesh - Brijesh', '4099f9a0-23ba-4ce7-93b8-eabfaf29b259', 'CBC7AB1A-BDCA-4E49-AE19-A61F0BE05610'), //Brijesh Victim
       //new Person('Brijesh - Shruti', 'EC4100E1-098D-41B5-B845-96FEA35C417D', '3250aba86473c6c6'), //Shruti Kulkarni - Customer 1
       //00008030-001549E214F2802E
-      // new Person('Abhay', '', ''),
     ]
   }
 
