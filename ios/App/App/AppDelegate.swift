@@ -50,10 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-//            //self.startLocationUpdate()
-//            self.scheduleLocalNotification()
-//        }
+        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+            //self.startLocationUpdate()
+            self.scheduleLocalNotification()
+        }
 //        self.startLocationUpdate()
         self.subscribeBusEvents()
         return true
@@ -416,22 +416,22 @@ extension AppDelegate : MessagingDelegate {
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.
-//    func userNotificationCenter(_ center: UNUserNotificationCenter,
-//                                willPresent notification: UNNotification,
-//                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-//        let userInfo = notification.request.content.userInfo
-//
-//        // With swizzling disabled you must let Messaging know about the message, for Analytics
-//        Messaging.messaging().appDidReceiveMessage(userInfo)
-//        // Print message ID.
-//        if let messageID = userInfo[gcmMessageIDKey] {
-//            debugPrint("Message ID: \(messageID)")
-//        }
-//        debugPrint("====2====\(userInfo)")
-//
-//        // Change this to your preferred presentation option
-//        completionHandler([])
-//    }
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let userInfo = notification.request.content.userInfo
+
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+        // Print message ID.
+        if let messageID = userInfo[gcmMessageIDKey] {
+            debugPrint("willPresentUserNotificationCenter Message ID: \(messageID)")
+        }
+        //sdebugPrint("didReceiveUserNotificationCenter\(userInfo)")
+
+        // Change this to your preferred presentation option
+          completionHandler([.alert,.sound])
+    }
     
     //TAP on notification hanlder
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -440,13 +440,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = response.notification.request.content.userInfo
         // Print message ID.
         if let messageID = userInfo[gcmMessageIDKey] {
-            debugPrint("Message ID: \(messageID)")
+            debugPrint("didReceiveUserNotificationCenter Message ID: \(messageID)")
         }
         //Helpshift implementation
         
         
         // Print full message.
-        debugPrint("=====3===\(userInfo)")
+        debugPrint("didReceiveUserNotificationCenter\(userInfo)")
         if let payload = userInfo["aps"] as? [AnyHashable: Any] {
             if (payload["alert"] as? [AnyHashable: Any]) != nil{
                 if let tripId = userInfo[""] as? String {
