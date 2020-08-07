@@ -50,10 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-            //self.startLocationUpdate()
-            self.scheduleLocalNotification()
-        }
+//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+//            //self.startLocationUpdate()
+//            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
+//        }
 //        self.startLocationUpdate()
         self.subscribeBusEvents()
         return true
@@ -229,11 +229,11 @@ extension AppDelegate {
         
         if #available(iOS 13.0, *) {
             BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.ionic.example.timer.count", using: nil){task in
-                self.scheduleLocalNotification()
+                self.scheduleLocalNotification(title: "Ally", body: "App Refreshed- BGAppRefreshTask", info: nil)
                 self.handleAppRefresh(task: task as! BGAppRefreshTask)
             }
             BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.ionic.example.timer.count.processing", using: nil){task in
-                self.scheduleLocalNotification()
+                self.scheduleLocalNotification(title: "Ally", body: "App Refreshed- BGProcessingTask", info: nil)
                 self.handleAppProcessing(task: task as! BGProcessingTask)
             }
         } else {
@@ -363,23 +363,26 @@ extension AppDelegate {
         }
     }
     
-    func scheduleLocalNotification() {
+    func scheduleLocalNotification(title: String, body: String, info: [AnyHashable: Any]?) {
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.getNotificationSettings { (settings) in
             //print("Notification settings: \(settings)")
             if settings.authorizationStatus == .authorized {
-                self.fireNotification()
+                self.fireNotification(title: title, body: body, info: info)
             }
         }
     }
     
-    func fireNotification() {
+    func fireNotification(title: String, body: String, info: [AnyHashable: Any]?) {
         // Create Notification Content
         let notificationContent = UNMutableNotificationContent()
         
         // Configure Notification Content
-        notificationContent.title = "Bg"
-        notificationContent.body = "BG Notifications."
+        notificationContent.title = title
+        notificationContent.body = body
+        if let info = info {
+            notificationContent.userInfo = info
+        }
         
         // Add Trigger
         let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.0, repeats: false)
