@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let region_identifier = "scram_region_identifier"
     var geotification: Geotification?
     var initialLocation : CLLocation!
-    var heading : CLHeading!
+    var direction : CLHeading!
     var person: Person!
     
     func detectInvoker(launchOptions:[UIApplication.LaunchOptionsKey: Any]?) {

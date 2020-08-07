@@ -102,7 +102,7 @@ extension AppDelegate {
             "altitude": location.altitude,
             "accuracy": location.horizontalAccuracy,
             "altitudeAccuracy": location.verticalAccuracy,
-            "direction": 0,
+            "direction": direction == nil ? 0 : direction.magneticHeading,
             "speed": location.speed,
             "satellite": 0,
             "csq": 0,
@@ -115,12 +115,13 @@ extension AppDelegate {
             "activityType": "activityType",
             "activityConfidence": -1,
             "batteryLevel": UIDevice.current.batteryLevel*100,
-            "isBatteryCharging": false,
+            "isBatteryCharging": UIDevice.current.batteryState == .charging ? true : false,
         ]]
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        self.heading = newHeading
+        direction = newHeading
+        print("direction = \(direction.magneticHeading)")
     }
     
     func stopMonitoring(geotification: Geotification) {
