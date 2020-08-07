@@ -44,20 +44,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         registerBackgroundTaks()
         //UIApplication.shared.setMinimumBackgroundFetchInterval(20)
-        UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+        //UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         FileActions().readFromFile()
         self.setUpFirebase(app: application)
         self.requestPermission()
         
         //        self.callDummyApi1()
 //        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-//            self.startLocationUpdate()
+//            //self.startLocationUpdate()
+//            self.scheduleLocalNotification()
 //        }
-        if let _ = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
-            
-        } else {
-            UserDefaults.standard.set(Date(), forKey: "lastLocationTime")
-        }
 //        self.startLocationUpdate()
         self.subscribeBusEvents()
         return true
@@ -72,8 +68,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UNUserNotificationCenter.current().delegate = self
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(
-                options: authOptions,
-                completionHandler: {_, _ in })
+                options: authOptions,completionHandler: {granted, _ in
+                    if granted {
+                        print("notificationCenter Permission granted: \(granted)") // 3
+                    } else {
+                        print("notificationCenter Permission denied: \(granted)") // 3
+                    }
+            })
         } else {
             let settings: UIUserNotificationSettings =
                 UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
@@ -308,7 +309,7 @@ extension AppDelegate {
         let request = BGProcessingTaskRequest(identifier: "com.ionic.example.timer.count.processing")
         request.requiresNetworkConnectivity = true // Need to true if your task need to network process. Defaults to false.
         request.requiresExternalPower = false
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 20)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 1*60)
         
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -321,7 +322,7 @@ extension AppDelegate {
     func scheduleAppRefresh () {
         let request = BGAppRefreshTaskRequest(identifier: "com.ionic.example.timer.count")
         // Fetch no earlier than 15 minutes from now, 15 * 60
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 15)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 1*60)
         
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -353,9 +354,11 @@ extension AppDelegate {
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         
         notificationCenter.requestAuthorization(options: options) {
-            (didAllow, error) in
-            if !didAllow {
-                print("User has declined notifications")
+            (granted, error) in
+            if granted {
+                print("notificationCenter Permission granted: \(granted)") // 3
+            } else {
+                print("notificationCenter Permission denied: \(granted)") // 3
             }
         }
     }
@@ -363,6 +366,7 @@ extension AppDelegate {
     func scheduleLocalNotification() {
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.getNotificationSettings { (settings) in
+            //print("Notification settings: \(settings)")
             if settings.authorizationStatus == .authorized {
                 self.fireNotification()
             }
@@ -412,22 +416,22 @@ extension AppDelegate : MessagingDelegate {
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let userInfo = notification.request.content.userInfo
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-        // Print message ID.
-        if let messageID = userInfo[gcmMessageIDKey] {
-            debugPrint("Message ID: \(messageID)")
-        }
-        debugPrint("====2====\(userInfo)")
-        
-        // Change this to your preferred presentation option
-        completionHandler([])
-    }
+//    func userNotificationCenter(_ center: UNUserNotificationCenter,
+//                                willPresent notification: UNNotification,
+//                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        let userInfo = notification.request.content.userInfo
+//
+//        // With swizzling disabled you must let Messaging know about the message, for Analytics
+//        Messaging.messaging().appDidReceiveMessage(userInfo)
+//        // Print message ID.
+//        if let messageID = userInfo[gcmMessageIDKey] {
+//            debugPrint("Message ID: \(messageID)")
+//        }
+//        debugPrint("====2====\(userInfo)")
+//
+//        // Change this to your preferred presentation option
+//        completionHandler([])
+//    }
     
     //TAP on notification hanlder
     func userNotificationCenter(_ center: UNUserNotificationCenter,

@@ -111,7 +111,7 @@ extension AppDelegate {
             "address": "address",
             "locationMode": "A",
             "eventType": "Location",
-            "cacheTimeStamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "cacheTimeStamp": location.timestamp.toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
             "batteryLevel": UIDevice.current.batteryLevel*100,
