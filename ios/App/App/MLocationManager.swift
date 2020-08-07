@@ -37,8 +37,9 @@ extension AppDelegate {
     }
     
     func requestPermission () {
-        self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.requestAlwaysAuthorization()
+        //locationManager.startUpdatingLocation()
+        self.locationManager.requestWhenInUseAuthorization()
     }
     
     func startLocationUpdate(){
@@ -69,12 +70,19 @@ extension AppDelegate {
     }
     func callServerAPI (location: CLLocation) {
         sendDataToIonic(info: ["lat":location.coordinate.latitude, "lng": location.coordinate.longitude])
+        #if targetEnvironment(simulator)
+        print("device is simulator")
+        return;
+        #endif
+        print("device is real")
+        
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = getPostData(location: location).toData
         print("location- ", location.coordinate.latitude, location.coordinate.longitude)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                 let data = data, error == nil

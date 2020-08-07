@@ -49,6 +49,10 @@
 	<string>Ally app needs to access your location always</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ally app needs to access your location when in use</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Ally app needs to access your location</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Ally app needs to access your location when in use/always</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To Record Audio With Video</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
