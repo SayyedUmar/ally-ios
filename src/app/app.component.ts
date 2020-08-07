@@ -34,7 +34,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.person_list = [
       new Person('Tushar - Kamlesh', 'B08FFE14-1AB0-4321-A46D-98E8FC74AA71', 'bcf7b96dbdefbde1'), //Victim 01 Kamlesh - Customer 1
       new Person('Sapandeep - Abhay', '84C515A8-A00D-4E06-81B4-48592351C096', '9233c89d05d89799'),
-      new Person('Brijesh - Shruti', 'EC4100E1-098D-41B5-B845-96FEA35C417D', '3250aba86473c6c6'), //Shruti Kulkarni - Customer 1
+      new Person('Brijesh - Brijesh', '4099f9a0-23ba-4ce7-93b8-eabfaf29b259', 'CBC7AB1A-BDCA-4E49-AE19-A61F0BE05610'), //Brijesh Victim
+      //new Person('Brijesh - Shruti', 'EC4100E1-098D-41B5-B845-96FEA35C417D', '3250aba86473c6c6'), //Shruti Kulkarni - Customer 1
       //00008030-001549E214F2802E
       // new Person('Abhay', '', ''),
     ]
