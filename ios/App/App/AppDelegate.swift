@@ -50,10 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
-            //self.startLocationUpdate()
-            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
-        }
+//        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+//            //self.startLocationUpdate()
+//            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
+//        }
 //        self.startLocationUpdate()
         self.subscribeBusEvents()
         return true
