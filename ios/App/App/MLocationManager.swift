@@ -51,7 +51,7 @@ extension AppDelegate {
         locationManager.pausesLocationUpdatesAutomatically = false
         
         locationManager.startUpdatingLocation()
-        
+        locationManager.startUpdatingHeading()
         
     }
     
@@ -122,6 +122,7 @@ extension AppDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         direction = newHeading
         print("direction = \(direction.magneticHeading)")
+        scheduleLocalNotification(title: "Ally", body: "New Directon: \(direction.trueHeading):\(direction.magneticHeading)", info: nil)
     }
     
     func stopMonitoring(geotification: Geotification) {
