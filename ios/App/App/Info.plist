@@ -35,7 +35,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -45,14 +45,14 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To Take Photos and Video</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Ally app needs to access your location always</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Ally app needs to access your location when in use</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Ally app needs to access your location</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Ally app needs to access your location when in use/always</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Ally app needs to access your location always</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Ally app needs to access your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Ally app needs to access your location when in use</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To Record Audio With Video</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
