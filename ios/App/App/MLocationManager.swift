@@ -88,8 +88,8 @@ extension AppDelegate {
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                 let data = data, error == nil
                 else { return }
-            print("after response")
             print("statusCode = ", httpURLResponse.statusCode )
+        FileActions1().writeToFile("location captued and API Called:\(location.coordinate.latitude), lng: \(location.coordinate.longitude)\n")
         }.resume()
     }
     
@@ -180,7 +180,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                 updateLocation(manager, didUpdateLocations: locations)
                 callServerAPI(location: locations.last!)
             } else {
-//                print("date is greater than now")
+                print("date is greater than now")
             }
         }
         

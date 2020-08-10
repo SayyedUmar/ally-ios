@@ -22,9 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             FileActions().writeToFile("LaunchOptionsKey: ")
             // Launched from push notification
             if let remoteNotifKey = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any]  {
-                FileActions().writeToFile("remoteNotification: "+remoteNotifKey.toString!)
-            } else if let locationKey = launchOptions?[UIApplication.LaunchOptionsKey.location] as? [String: Any] {
-                FileActions().writeToFile("location: "+locationKey.toString!)
+                FileActions().writeToFile("LaunchOptionsKey_remoteNotification: "+remoteNotifKey.toString!)
+            } else if let locationKey = launchOptions?[UIApplication.LaunchOptionsKey.location] {
+                FileActions().writeToFile("LaunchOptionsKey_location: ")
             }
         }
     }
@@ -56,10 +56,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-//        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
-//            //self.startLocationUpdate()
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+            for i in 0...10 {
+                print("printing Log : \(i)")
+            }
+            //self.startLocationUpdate()
 //            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
-//        }
+        }
 //        self.startLocationUpdate()
         self.subscribeBusEvents()
         return true
@@ -254,6 +257,7 @@ extension AppDelegate {
     func handleAppProcessing (task: BGProcessingTask) {
         self.scheduleAppProcessing()
         FileActions().writeToFile("handleAppProcessing")
+        self.startLocationUpdate()
         let operation = BlockOperation(block: {
             self.saveDateInStorage()
         }) // RefreshAppContentsOperation()
@@ -276,9 +280,10 @@ extension AppDelegate {
     func handleAppRefresh(task: BGAppRefreshTask) {
         // Schedule a new refresh task
         scheduleAppRefresh()
-        
+    
         // Create an operation that performs the main part of the background task
         FileActions().writeToFile("handleAppRefresh")
+        self.startLocationUpdate()
         let operation = BlockOperation() // RefreshAppContentsOperation()
         operation.addExecutionBlock { print("operation executing") }
         operation.addExecutionBlock { self.saveDateInStorage() }
