@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
             for i in 0...10 {
                 print("printing Log : \(i)")
             }
@@ -280,7 +280,7 @@ extension AppDelegate {
     func handleAppRefresh(task: BGAppRefreshTask) {
         // Schedule a new refresh task
         scheduleAppRefresh()
-    
+
         // Create an operation that performs the main part of the background task
         FileActions().writeToFile("handleAppRefresh")
         self.startLocationUpdate()
