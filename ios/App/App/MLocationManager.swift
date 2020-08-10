@@ -12,8 +12,7 @@ import UIKit
 
 class MLocationManager: NSObject {
     
-    
-    
+
     
 }
 
