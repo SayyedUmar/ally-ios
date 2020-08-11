@@ -38,7 +38,7 @@ extension AppDelegate {
     func requestPermission () {
         self.locationManager.requestAlwaysAuthorization()
         //locationManager.startUpdatingLocation()
-        self.locationManager.requestWhenInUseAuthorization()
+        //self.locationManager.requestWhenInUseAuthorization()
     }
     
     func startLocationUpdate(){
@@ -69,6 +69,7 @@ extension AppDelegate {
     }
     func callServerAPI (location: CLLocation) {
         sendDataToIonic(info: ["lat":location.coordinate.latitude, "lng": location.coordinate.longitude])
+        print("body- ", getPostData(location: location))
         #if targetEnvironment(simulator)
         print("device is simulator")
         return;
@@ -97,7 +98,7 @@ extension AppDelegate {
         return [[
             "victimId": self.person.victimId,
             "deviceImei": self.person.deviceId,
-            "timestamp": Date().toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "timestamp": Date().toUTCString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
             "latitude": location.coordinate.latitude,
             "longitude": location.coordinate.longitude,
             "altitude": location.altitude,
@@ -112,7 +113,7 @@ extension AppDelegate {
             "address": "address",
             "locationMode": "A",
             "eventType": "Location",
-            "cacheTimeStamp": location.timestamp.toUTCString("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"),
+            "cacheTimeStamp": location.timestamp.toUTCString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
             "batteryLevel": UIDevice.current.batteryLevel*100,
@@ -174,6 +175,7 @@ extension AppDelegate: CLLocationManagerDelegate {
         if var lastDate = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
             let now = Date()
             lastDate.addTimeInterval(1 * 60) // in seconds
+            //print("lastDate: \(lastDate.toString("dd MM yyyy hh:mm:ss"))")
             if lastDate < now {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")

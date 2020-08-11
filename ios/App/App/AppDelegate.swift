@@ -57,10 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //        self.callDummyApi1()
         Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
-            for i in 0...10 {
-                print("printing Log : \(i)")
-            }
-            //self.startLocationUpdate()
+//            for i in 0...10 {
+//                print("printing Log : \(i)")
+//            }
+//            self.startLocationUpdate()
 //            self.scheduleLocalNotification(title: "LocalNotif", body: "body", info: nil)
         }
 //        self.startLocationUpdate()
@@ -118,12 +118,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        FileActions().writeToFile("app entered in foreground")
+        //FileActions().writeToFile("app entered in foreground_1")
+        print("app entered in foreground_1")
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        print("app entered in foreground_2")
+        FileActions().writeToFile("app entered in foreground_1")
         locationManager.stopMonitoringSignificantLocationChanges()
     }
     
