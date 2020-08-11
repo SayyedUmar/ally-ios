@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
         print("didFinishLaunchingWithOptions", arr)
         
-        registerBackgroundTaks()
+        //registerBackgroundTaks()
         //UIApplication.shared.setMinimumBackgroundFetchInterval(20)
         //UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         FileActions().readFromFile()
@@ -109,9 +109,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             locationManager.startMonitoringSignificantLocationChanges()
         }
         if #available(iOS 13.0, *) {
-            self.cancelAllPandingBGTask()
-            self.scheduleAppRefresh()
-            self.scheduleAppProcessing()
+//            self.cancelAllPandingBGTask()
+//            self.scheduleAppRefresh()
+//            self.scheduleAppProcessing()
         } else {
             // Fallback on earlier versions
         }
@@ -133,6 +133,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         FileActions().writeToFile("applicationWillTerminate")
+    }
+    
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        FileActions().writeToFile("applicationDidReceiveMemoryWarning")
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -260,7 +264,7 @@ extension AppDelegate {
     func handleAppProcessing (task: BGProcessingTask) {
         self.scheduleAppProcessing()
         FileActions().writeToFile("handleAppProcessing")
-        self.startLocationUpdate()
+        //self.startLocationUpdate()
         let operation = BlockOperation(block: {
             self.saveDateInStorage()
         }) // RefreshAppContentsOperation()
@@ -286,7 +290,7 @@ extension AppDelegate {
 
         // Create an operation that performs the main part of the background task
         FileActions().writeToFile("handleAppRefresh")
-        self.startLocationUpdate()
+        //self.startLocationUpdate()
         let operation = BlockOperation() // RefreshAppContentsOperation()
         operation.addExecutionBlock { print("operation executing") }
         operation.addExecutionBlock { self.saveDateInStorage() }

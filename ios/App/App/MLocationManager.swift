@@ -43,8 +43,8 @@ extension AppDelegate {
     
     func startLocationUpdate(){
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        locationManager.activityType = CLActivityType.automotiveNavigation
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.activityType = CLActivityType.fitness
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.pausesLocationUpdatesAutomatically = false
