@@ -202,7 +202,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        FileActions().writeToFile(writeData:Date().toString("dd MM YY hh:mm:ss")+"\n")
         //        FileActions().readFromFile()
         
-        self.startLocationUpdate()
+        //self.startLocationUpdate()
         
         //        if(application.applicationState == UIApplication.State.active) {
         //            //app is currently active, can update badges count here
@@ -444,7 +444,7 @@ extension AppDelegate {
 
 extension AppDelegate : MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        print("Firebase registration token: \(fcmToken)")
+        print("FCMToken: \(fcmToken)")
         
         let dataDict:[String: String] = ["token": fcmToken]
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
