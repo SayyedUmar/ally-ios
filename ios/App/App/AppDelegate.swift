@@ -70,8 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setUpFirebase (app:UIApplication) {
         //Access the registration token
-        Messaging.messaging().delegate = self
+        
         FirebaseApp.configure()
+        Messaging.messaging().delegate = self
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -80,6 +81,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 options: authOptions,completionHandler: {granted, _ in
                     if granted {
                         print("notificationCenter Permission granted: \(granted)") // 3
+                        guard granted else {   return}
+                        DispatchQueue.main.async {
+                            self.getNotificationSettings()
+                        }
                     } else {
                         print("notificationCenter Permission denied: \(granted)") // 3
                     }
@@ -242,6 +247,21 @@ extension String {
 }
 
 extension AppDelegate {
+    
+    func getNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            print("Notification settings: \(settings)")
+            
+            guard settings.authorizationStatus == .authorized else {
+                return
+            }
+            
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+    }
+    
     func registerBackgroundTaks() {
         
         if #available(iOS 13.0, *) {
@@ -434,6 +454,8 @@ extension AppDelegate : MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
         print("messaging", messaging.fcmToken)
     }
+
+    
 }
 
 @available(iOS 10, *)
@@ -454,7 +476,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         //sdebugPrint("didReceiveUserNotificationCenter\(userInfo)")
 
         // Change this to your preferred presentation option
-        completionHandler([.alert,.sound])
+        completionHandler([.alert,.badge,.sound])
     }
     
     //TAP on notification hanlder
