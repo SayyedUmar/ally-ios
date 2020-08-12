@@ -34,6 +34,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         //self.clearUserDefault();
         
         UIDevice.current.isBatteryMonitoringEnabled = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(becomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(resignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(terminateNotification), name: UIApplication.willTerminateNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveMemoryWarningNotification), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+    }
+    
+    @objc func becomeActiveNotification() {
+      FileActions().writeToFile("=====becomeActiveNotification=====")
+    }
+    
+    @objc func resignActiveNotification() {
+      FileActions().writeToFile("=====resignActiveNotification=====")
+    }
+    
+    @objc func terminateNotification() {
+      FileActions().writeToFile("=====terminateNotification=====")
+    }
+    
+    @objc func receiveMemoryWarningNotification() {
+      FileActions().writeToFile("=====receiveMemoryWarningNotification=====")
     }
 
     @IBAction func btnSyncDidTap(_ sender: Any) {
