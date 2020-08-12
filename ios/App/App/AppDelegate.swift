@@ -70,9 +70,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setUpFirebase (app:UIApplication) {
         //Access the registration token
-        
+
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
+
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -173,7 +174,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
-        print("deviceToken", deviceToken)
+        print("deviceToken", deviceToken.hexString)
         Messaging.messaging().apnsToken = deviceToken
          Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
         NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
