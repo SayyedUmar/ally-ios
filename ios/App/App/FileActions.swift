@@ -27,7 +27,7 @@ class FileActions {
             if fileManager.fileExists(atPath: filePath.path){
                 locationsInFile = try String(contentsOf: filePath)
             }
-            let data = locationsInFile + "\n" + Date().toString("E dd MM YY hh:mm:ss") + " " + writeData
+            let data = locationsInFile + "\n" + Date().toString("E dd MM YY HH:mm:ss") + " " + writeData
             try data.write(to: filePath, atomically: false, encoding: String.Encoding.utf8)
             //try writeData.write(to: filePath, atomically: false, encoding: String.Encoding.utf8)
         } catch let error as NSError {
@@ -70,7 +70,7 @@ class FileActions1 {
             if fileManager.fileExists(atPath: filePath.path){
                 locationsInFile = try String(contentsOf: filePath)
             }
-            let data = locationsInFile + "\n" + Date().toString("E dd MM YY hh:mm:ss") + " " + writeData
+            let data = locationsInFile + "\n" + Date().toString("E dd MM YY HH:mm:ss") + " " + writeData
             try data.write(to: filePath, atomically: false, encoding: String.Encoding.utf8)
             //try writeData.write(to: filePath, atomically: false, encoding: String.Encoding.utf8)
         } catch let error as NSError {
