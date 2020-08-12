@@ -76,7 +76,7 @@ extension AppDelegate {
         #endif
         print("device is real")
         
-        FileActions1().writeToFile("location captued lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude)")
+        FileActions1().writeToFile("location captued lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
@@ -88,9 +88,13 @@ extension AppDelegate {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
                 let data = data, error == nil
-                else { return }
-            print("statusCode = ", httpURLResponse.statusCode )
-        FileActions1().writeToFile("location captued and API Called:\(location.coordinate.latitude), lng: \(location.coordinate.longitude)\n")
+                else {
+                    if let res = response as? HTTPURLResponse {
+                        FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)\n")
+                    }
+                    return
+            }
+            FileActions1().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)\n")
         }.resume()
     }
     

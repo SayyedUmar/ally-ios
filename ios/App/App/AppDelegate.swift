@@ -133,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         connectToFcm()
         print("app entered in foreground_2")
-        FileActions().writeToFile("app entered in foreground_1")
+        FileActions().writeToFile("app entered in foreground_2")
         locationManager.stopMonitoringSignificantLocationChanges()
     }
     
