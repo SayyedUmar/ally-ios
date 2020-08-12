@@ -102,6 +102,8 @@ extension AppDelegate {
         return [[
             "victimId": self.person.victimId,
             "deviceImei": self.person.deviceId,
+//            "victimId": "84C515A8-A00D-4E06-81B4-48592351C096",
+//            "deviceImei": "9233c89d05d89799",
             "timestamp": Date().toUTCString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
             "latitude": location.coordinate.latitude,
             "longitude": location.coordinate.longitude,

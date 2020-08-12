@@ -175,7 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("deviceToken", deviceToken.hexString)
         Messaging.messaging().apnsToken = deviceToken
-//         Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
+        Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
         NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
     }
     
@@ -204,11 +204,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }else if(application.applicationState ==  UIApplication.State.background){
             //app is in background, if content-available key of your notification is set to 1, poll to your backend to retrieve data and update your interface here
             FileActions1().writeToFile("didReceiveRemoteNotification_UIApplicationStateBackground")
-//            self.startLocationUpdate()
+            self.startLocationUpdate()
         }else if(application.applicationState ==  UIApplication.State.inactive){
             //app is transitioning from background to foreground (user taps notification), do what you need when user taps here
             FileActions1().writeToFile("didReceiveRemoteNotification_UIApplicationStateInactive")
-//            self.startLocationUpdate()
         }
     }
 }
