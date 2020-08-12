@@ -199,22 +199,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         print("didReceiveRemoteNotification", userInfo)
         
-        //        FileActions().writeToFile(writeData:"didReceiveRemoteNotification")
-        //        FileActions().writeToFile(writeData:Date().toString("dd MM YY hh:mm:ss")+"\n")
-        //        FileActions().readFromFile()
-        
-        //self.startLocationUpdate()
-        
-        //        if(application.applicationState == UIApplication.State.active) {
-        //            //app is currently active, can update badges count here
-        //            FileActions().writeToFile("UIApplicationStateActive")
-        //        }else if(application.applicationState ==  UIApplication.State.background){
-        //            //app is in background, if content-available key of your notification is set to 1, poll to your backend to retrieve data and update your interface here
-        //            FileActions().writeToFile("UIApplicationStateBackground")
-        //        }else if(application.applicationState ==  UIApplication.State.inactive){
-        //            //app is transitioning from background to foreground (user taps notification), do what you need when user taps here
-        //            FileActions().writeToFile("UIApplicationStateInactive")
-        //        }
+        if(application.applicationState == UIApplication.State.active) {
+            //app is currently active, can update badges count here
+            FileActions1().writeToFile("didReceiveRemoteNotification_UIApplicationStateActive")
+        }else if(application.applicationState ==  UIApplication.State.background){
+            //app is in background, if content-available key of your notification is set to 1, poll to your backend to retrieve data and update your interface here
+            FileActions1().writeToFile("didReceiveRemoteNotification_UIApplicationStateBackground")
+//            self.startLocationUpdate()
+        }else if(application.applicationState ==  UIApplication.State.inactive){
+            //app is transitioning from background to foreground (user taps notification), do what you need when user taps here
+            FileActions1().writeToFile("didReceiveRemoteNotification_UIApplicationStateInactive")
+//            self.startLocationUpdate()
+        }
     }
 }
 
