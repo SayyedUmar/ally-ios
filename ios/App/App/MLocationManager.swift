@@ -179,7 +179,7 @@ extension AppDelegate: CLLocationManagerDelegate {
         if var lastDate = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
             let now = Date()
             lastDate.addTimeInterval(1 * 60) // in seconds
-            //print("lastDate: \(lastDate.toString("dd MM yyyy hh:mm:ss"))")
+            //print("lastDate: \(lastDate.toString("dd MM yyyy HH:mm:ss"))")
             if lastDate < now {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")

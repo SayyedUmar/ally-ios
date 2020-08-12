@@ -44,7 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(Date(), forKey: "lastLocationTime")
         }
 
-//        arr.append("didFinishLaunchingWithOptions"+Date().toString("dd MM YY hh:mm:ss"))
         UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
         print("didFinishLaunchingWithOptions", arr)
         
@@ -176,7 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("deviceToken", deviceToken.hexString)
         Messaging.messaging().apnsToken = deviceToken
-         Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
+//         Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
         NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
     }
     
@@ -338,14 +337,14 @@ extension AppDelegate {
     }
     
     func saveDateInStorage() {
-        print("saveDateInStorage")
-        var arr = [""]
-        if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
-            arr = ar as! [String]
-        }
-        arr.append(Date().toString("dd MM YY hh:mm:ss"))
-        UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
-        print("saveDateInStorage", arr)
+//        print("saveDateInStorage")
+//        var arr = [""]
+//        if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
+//            arr = ar as! [String]
+//        }
+//        arr.append(Date().toString("dd MM YY HH:mm:ss"))
+//        UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
+//        print("saveDateInStorage", arr)
     }
     
     @available(iOS 13.0, *)
