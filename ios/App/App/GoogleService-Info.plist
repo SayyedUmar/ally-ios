@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>857024326881-jqd3i8bcm6ah4p1gbrnbpirleh86oat6.apps.googleusercontent.com</string>
+	<string>287257776741-v33a4p1kqd272gfr0p4crt4dndhb2bph.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.857024326881-jqd3i8bcm6ah4p1gbrnbpirleh86oat6</string>
+	<string>com.googleusercontent.apps.287257776741-v33a4p1kqd272gfr0p4crt4dndhb2bph</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAvx3Epv4Foyksh7qH42WHyGJsCnxSXuQ4</string>
+	<string>AIzaSyDtVVydljmnL4akifsxIdIod1AnsYpo2o0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>857024326881</string>
+	<string>287257776741</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.scram.mobile.ally.stage</string>
 	<key>PROJECT_ID</key>
-	<string>ally-poc-957b2</string>
+	<string>scram-ally</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ally-poc-957b2.appspot.com</string>
+	<string>scram-ally.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:857024326881:ios:9ee2999f4d0fd3080c9ba0</string>
+	<string>1:287257776741:ios:5f3eebe5bccfdefeec6c8c</string>
 	<key>DATABASE_URL</key>
-	<string>https://ally-poc-957b2.firebaseio.com</string>
+	<string>https://scram-ally.firebaseio.com</string>
 </dict>
 </plist>

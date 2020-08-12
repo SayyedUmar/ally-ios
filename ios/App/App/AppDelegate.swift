@@ -251,10 +251,11 @@ extension String {
 extension AppDelegate {
     
     func connectToFcm(){
-        FIRMessaging.messaging().connectWithCompletion { (error) in
-                if (error != nil){print("Unable to connect with FCM. \(error)")}
-                else {print("Connected to FCM.")}
-        }
+//        Messaging.messaging().connect
+//        FirebaseApp.message.connectWithCompletion { (error) in
+//                if (error != nil){print("Unable to connect with FCM. \(error)")}
+//                else {print("Connected to FCM.")}
+//        }
     }
     func getNotificationSettings() {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
@@ -452,7 +453,15 @@ extension AppDelegate {
 extension AppDelegate : MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("FCMToken: \(fcmToken)")
-        
+        InstanceID.instanceID().instanceID { (result, error) in
+          if let error = error {
+            print("Error fetching remote instance ID: \(error)")
+          } else if let result = result {
+            print("Remote instance ID token: \(result.token)")
+//            self.instanceIDTokenMessage.text  = "Remote InstanceID token: \(result.token)"
+          }
+        }
+
         let dataDict:[String: String] = ["token": fcmToken]
         NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
         // TODO: If necessary send token to application server.
