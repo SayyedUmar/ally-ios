@@ -131,6 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        connectToFcm()
         print("app entered in foreground_2")
         FileActions().writeToFile("app entered in foreground_1")
         locationManager.stopMonitoringSignificantLocationChanges()
@@ -249,6 +250,12 @@ extension String {
 
 extension AppDelegate {
     
+    func connectToFcm(){
+        FIRMessaging.messaging().connectWithCompletion { (error) in
+                if (error != nil){print("Unable to connect with FCM. \(error)")}
+                else {print("Connected to FCM.")}
+        }
+    }
     func getNotificationSettings() {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             print("Notification settings: \(settings)")
@@ -455,13 +462,11 @@ extension AppDelegate : MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
         print("messaging", messaging.fcmToken)
     }
-
     
 }
 
 @available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
-    
     // Receive displayed notifications for iOS 10 devices.
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
