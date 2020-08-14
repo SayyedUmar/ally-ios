@@ -82,7 +82,7 @@ extension AppDelegate {
         
         FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
-        FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body?.toString)")
+        FileActions2().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!)")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
@@ -190,14 +190,14 @@ extension AppDelegate: CLLocationManagerDelegate {
             let now = Date()
             lastDate.addTimeInterval(1 * 60) // in seconds
             //print("lastDate: \(lastDate.toString("dd MM yyyy HH:mm:ss"))")
-//            if lastDate < now {
+            if lastDate < now {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
                 callServerAPI(location: locations.last!)
-//            } else {
-//                print("date is greater than now")
-//            }
+            } else {
+                print("date is greater than now")
+            }
         }
         
         //locationManager.allowDeferredLocationUpdates(untilTraveled: 0, timeout: 5)

@@ -22,8 +22,9 @@ extension AppDelegate {
             print("emailLogFile")
             let url = FileActions().getFilePath()
             let url1 = FileActions1().getFilePath()
+            let url2 = FileActions2().getFilePath()
             do {
-                try self.sendEmail(data: Data(contentsOf: url), data1: Data(contentsOf: url1))
+                try self.sendEmail(data: Data(contentsOf: url), data1: Data(contentsOf: url1), data2: Data(contentsOf: url2))
             } catch {print(error.localizedDescription)}
         }
         
@@ -52,7 +53,7 @@ extension AppDelegate {
 //        capVC?.bridge.triggerDocumentJSEvent(eventName: "onLocationCapture", data: dic)
 //    }
     
-    func sendEmail(data:Data?, data1:Data?){
+    func sendEmail(data:Data?, data1:Data?, data2:Data?){
         if( MFMailComposeViewController.canSendMail() ) {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
@@ -66,6 +67,10 @@ extension AppDelegate {
             }
             if let fileData = data1 {
                 mailComposer.addAttachmentData(fileData, mimeType: "application/pdf", fileName: "locationLogs.txt")
+            }
+            
+            if let fileData = data2 {
+                mailComposer.addAttachmentData(fileData, mimeType: "application/pdf", fileName: "apilogs.txt")
             }
             
             if let window = self.window, let rootVC = window.rootViewController {
