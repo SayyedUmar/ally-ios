@@ -76,12 +76,15 @@ extension AppDelegate {
         #endif
         print("device is real")
         
-        FileActions1().writeToFile("location captued lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
+        FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
+        
+        let body = getPostData(location: location).toData
+        FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body?.toString)")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.httpBody = getPostData(location: location).toData
+        request.httpBody = body
         print("location- ", location.coordinate.latitude, location.coordinate.longitude)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -90,11 +93,13 @@ extension AppDelegate {
                 let data = data, error == nil
                 else {
                     if let res = response as? HTTPURLResponse {
-                        FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)\n")
+                        FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)")
+                        FileActions2().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)")
                     }
                     return
             }
-            FileActions1().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)\n")
+            FileActions1().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)")
+            FileActions2().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)")
         }.resume()
     }
     

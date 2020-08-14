@@ -175,7 +175,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("deviceToken", deviceToken.hexString)
         Messaging.messaging().apnsToken = deviceToken
-        Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
+        //Messaging.messaging().subscribe(toTopic: "ios_tech_ally_poc")
         NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
     }
     
