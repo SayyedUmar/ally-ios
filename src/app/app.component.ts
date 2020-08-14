@@ -5,6 +5,17 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Plugins } from "@capacitor/core"
 import { AlertController } from '@ionic/angular';
+// import { DomSanitizer } from '@angular/platform-browser';
+
+declare global  {
+  interface PluginRegistry {
+      PluginTest?: PluginTest;
+  }
+}
+
+interface PluginTest {
+  getLastPhotoTaken(): Promise<any>;
+}
 
 const { CustomPlugin, Geolocation } = Plugins
 @Component({
@@ -23,12 +34,25 @@ export class AppComponent implements OnInit, OnDestroy {
   lng: number
   date: string
 
+  private lastPhoto: string = 'http://placehold.it/500x500';
+
+  getLatestPhoto(){
+
+    const { PluginTest } = Plugins;
+
+    PluginTest.getLastPhotoTaken().then((result) => {
+        this.lastPhoto = "data:image/png;base64, " + result.image;
+    });
+
+  }
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private cdRef: ChangeDetectorRef,
-    public alertController: AlertController
+    public alertController: AlertController,
+    // private domSanitizer: DomSanitizer
   ) {
     this.initializeApp()
     this.person_list = [
