@@ -68,8 +68,12 @@ extension AppDelegate {
         }.resume()
     }
     func callServerAPI (location: CLLocation) {
+                
         sendDataToIonic(info: ["lat":location.coordinate.latitude, "lng": location.coordinate.longitude])
-        print("body- ", getPostData(location: location))
+        
+        let body = getPostData(location: location).toData
+        //print("body- \(getPostData(location: location))")
+        
         #if targetEnvironment(simulator)
         print("device is simulator")
         return;
@@ -78,7 +82,6 @@ extension AppDelegate {
         
         FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
-        let body = getPostData(location: location).toData
         FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body?.toString)")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
@@ -187,14 +190,14 @@ extension AppDelegate: CLLocationManagerDelegate {
             let now = Date()
             lastDate.addTimeInterval(1 * 60) // in seconds
             //print("lastDate: \(lastDate.toString("dd MM yyyy HH:mm:ss"))")
-            if lastDate < now {
+//            if lastDate < now {
                 print("date is less than now")
                 UserDefaults.standard.set(now, forKey: "lastLocationTime")
                 updateLocation(manager, didUpdateLocations: locations)
                 callServerAPI(location: locations.last!)
-            } else {
-                print("date is greater than now")
-            }
+//            } else {
+//                print("date is greater than now")
+//            }
         }
         
         //locationManager.allowDeferredLocationUpdates(untilTraveled: 0, timeout: 5)
