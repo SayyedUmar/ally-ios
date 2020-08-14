@@ -72,7 +72,7 @@ extension AppDelegate {
         sendDataToIonic(info: ["lat":location.coordinate.latitude, "lng": location.coordinate.longitude])
         
         let body = getPostData(location: location).toData
-        //print("body- \(getPostData(location: location))")
+        print("body- \(getPostData(location: location))")
         
         #if targetEnvironment(simulator)
         print("device is simulator")
@@ -82,7 +82,7 @@ extension AppDelegate {
         
         FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
-        FileActions2().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!)")
+        FileActions2().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString.replacingOccurrences(of: "\"", with: "'"))")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)

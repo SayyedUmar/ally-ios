@@ -17,6 +17,11 @@ class FileActions {
         return fileURL
     }
     
+    func getPath () -> String {
+        let filePath :URL = self.getFilePath()
+        return filePath.absoluteString
+    }
+    
     func writeToFile(_ writeData:String) {
         let filePath :URL = self.getFilePath()
         do {
@@ -58,6 +63,11 @@ class FileActions1 {
         let fileURL = documentDir.appendingPathComponent(fileName).appendingPathExtension("txt")
 
         return fileURL
+    }
+    
+    func getPath () -> String {
+        let filePath :URL = self.getFilePath()
+        return filePath.absoluteString
     }
     
     func writeToFile(_ writeData:String) {
@@ -102,6 +112,11 @@ class FileActions2 {
         let fileURL = documentDir.appendingPathComponent(fileName).appendingPathExtension("txt")
 
         return fileURL
+    }
+    
+    func getPath () -> String {
+        let filePath :URL = self.getFilePath()
+        return filePath.absoluteString
     }
     
     func writeToFile(_ writeData:String) {

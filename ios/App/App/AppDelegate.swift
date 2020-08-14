@@ -50,7 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //registerBackgroundTaks()
         //UIApplication.shared.setMinimumBackgroundFetchInterval(20)
         //UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-        FileActions().readFromFile()
+        print(FileActions().getPath())
+        print(FileActions1().getPath())
+        print(FileActions2().getPath())
         self.setUpFirebase(app: application)
         self.requestPermission()
         
