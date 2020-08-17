@@ -99,6 +99,7 @@ extension AppDelegate {
                         FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)")
                         FileActions2().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)")
                     }
+                    
                     return
             }
             FileActions1().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)")
@@ -130,7 +131,7 @@ extension AppDelegate {
             "cacheTimeStamp": location.timestamp.toUTCString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),
             "activityType": "activityType",
             "activityConfidence": -1,
-            "batteryLevel": UIDevice.current.batteryLevel*100,
+            "batteryLevel": Double(round(1000*UIDevice.current.batteryLevel*100)/1000),
             "isBatteryCharging": UIDevice.current.batteryState == .charging ? true : false,
         ]]
     }
