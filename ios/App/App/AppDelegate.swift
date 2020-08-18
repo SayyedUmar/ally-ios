@@ -30,10 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FileActions().writeToFile("Current Device - \(UIDevice().model) \(UIDevice().localizedModel), OS Version -\(UIDevice().systemVersion)")
+
         // Override point for customization after application launch.
         self.detectInvoker(launchOptions:launchOptions)
         UIDevice.current.isBatteryMonitoringEnabled = true
-
+        
         var arr = [""]
         if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
             arr = ar as! [String]
