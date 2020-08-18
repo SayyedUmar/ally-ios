@@ -58,7 +58,7 @@ extension AppDelegate {
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
             
-            mailComposer.setToRecipients(["usayyed@xpanxion.com"])
+            mailComposer.setToRecipients(["usayyed@xpanxion.com","tmohod@xpanxion.com"])
             mailComposer.setSubject("POC Log file")
             mailComposer.setMessageBody("Hey FYI.", isHTML: true)
             

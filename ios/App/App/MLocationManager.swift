@@ -80,9 +80,9 @@ extension AppDelegate {
         #endif
         print("device is real")
         
-        FileActions1().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
+        FileActions1().writeToFile("location service status = \(getLocationSerStatus()) ,location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
-        FileActions2().writeToFile("location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString.replacingOccurrences(of: "\"", with: "'"))")
+        FileActions2().writeToFile("location service status = \(getLocationSerStatus()),location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString.replacingOccurrences(of: "\"", with: "'"))")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
@@ -172,13 +172,33 @@ extension AppDelegate {
         self.startLocationUpdate()
     }
     
+    //MARK: Location service detection
+    func getLocationSerStatus()-> String {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+                case .notDetermined, .restricted, .denied:
+                    return "Not accessible"
+                case .authorizedWhenInUse:
+                    return "authorized When In Use"
+                case .authorizedAlways:
+                    return "authorized Always"
+                @unknown default:
+                    return "unknown error"
+                }
+            }
+        else {
+              return "Location services is not enabled"
+        }
+    }
 }
 
 extension AppDelegate: CLLocationManagerDelegate {
     
     private func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        self.locationManager.stopUpdatingLocation()
+        //self.locationManager.stopUpdatingLocation()
+        FileActions1().writeToFile("Error getting location : ")
         if (error != nil) {
+            FileActions1().writeToFile(error.description)
             print(error.description)
         }
     }
@@ -250,6 +270,21 @@ extension AppDelegate: CLLocationManagerDelegate {
 //            stopMonitoring(geotification: Geotification(identifier: region.identifier, cord: circularRegion.center))
         } else if state == CLRegionState.unknown{
             print("state: unknown")
+        }
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        switch status {
+        case .notDetermined, .restricted, .denied:
+            FileActions().writeToFile("Loc authorization status changed to Not accessible")
+        case .authorizedAlways:
+            FileActions().writeToFile("Loc authorization status changed to authorized Always")
+        case .authorizedWhenInUse:
+            FileActions().writeToFile("Loc authorization status changed to authorized When In Use")
+        @unknown default:
+            FileActions().writeToFile("Loc authorization status change error occured")
         }
         
     }
