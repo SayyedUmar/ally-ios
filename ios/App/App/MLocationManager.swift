@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 import UIKit
-import Alamofire
+//import Alamofire
 import SwiftyJSON
 
 class MLocationManager: NSObject {
@@ -63,33 +63,35 @@ extension AppDelegate {
         let url = URL(string: "http://localhost:8004/testAPI")!
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let data = data, error == nil   
+                let d = data, error == nil
                 else {
-                    print("error received", error?.localizedDescription)
+                    print("error received", data!.toString)
                     return }
-            let dic = data.toJSON()
-            print("response received",data.toJSON())
+//            let dic = d.toJSON()
+//            print("response received",data?.toJSON())
             //FileActions().writeToFile("\(dic?["title"]!) Lat -\(coord.latitude) | Long - \(coord.longitude)")
-            
+
         }.resume()
         
-         Alamofire.request("http://localhost:8004/testAPI",method: .get, parameters: [:], headers: [:])
-        //         .validate(contentType: [contentType])
-                   .responseJSON { (response) in
-                       
-               if let value = response.data {
-                   let json = JSON(value)
-                   print("Response: ", json)
-               } else {
-               }
-       }
-//        AF.request(url).responseData { response in
-//            switch response.result {
-//            case .success:
-//                print("Validation Successful")
-//            case let .failure(error):
-//                print(error)
-//            }
+//        Alamofire.request("http://localhost:8004/testAPI",method: .get, parameters: [:], headers: [:])
+//            //         .validate(contentType: [contentType])
+//            .responseJSON { (response) in
+//                switch response.result {
+//
+//                case .success:
+//                    print("success")
+//                    break;
+//
+//                case .failure(let error):
+//                    print("failure")
+//                    break;
+//                }
+//                if let value = response.data {
+//                    let json = JSON(value)
+//                    print("Response: ", json)
+//                    //FileActions2().writeToFile(value.toString)
+//                } else {
+//                }
 //        }
     }
     func callServerAPI (location: CLLocation) {
@@ -105,9 +107,9 @@ extension AppDelegate {
         #endif
         print("device is real")
         
-        FileActions1().writeToFile("locatio=\(getLocationSerStatus()) ,location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
+        FileActions1().writeToFile("location_status=\(getLocationSerStatus()), internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
-        FileActions2().writeToFile("location=\(getLocationSerStatus()),location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString.replacingOccurrences(of: "\"", with: "'"))")
+        FileActions2().writeToFile("location_status=\(getLocationSerStatus()), internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString)")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
@@ -116,16 +118,42 @@ extension AppDelegate {
         print("location- ", location.coordinate.latitude, location.coordinate.longitude)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        
+//        Alamofire.request("http://localhost:8004/testAPI",method: .get, parameters: [:], headers: [:])
+//            //         .validate(contentType: [contentType])
+//            .responseJSON { (response) in
+//
+////                switch response.result {
+////                case .success:
+////                    break;
+////                case .failure(let error):
+////                    break;
+////                }
+//                guard let statusCode = response.response?.statusCode else {return}
+//                if (statusCode == 200) {
+//                    print("API Call Successful", statusCode)
+//                    FileActions1().writeToFile("API Call Successful:statusCode:\(statusCode)")
+//                    FileActions2().writeToFile("API Call Successful:statusCode:\(statusCode)")
+//
+//                } else {
+//                    print("API Call Failed", statusCode)
+//                    if let value = response.data {
+//                        //let json = JSON(value)
+//                        FileActions1().writeToFile("API Call Failed: statusCode:\(statusCode), error:\(value.toString)")
+//                        FileActions2().writeToFile("API Call Failed: statusCode:\(statusCode), error:\(value.toString)")
+//                    } else {
+//                    }
+//                }
+//
+//        }
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let data = data, error == nil
+                let d = data, error == nil
                 else {
-                    if let res = response as? HTTPURLResponse {
-                        FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)")
-                        FileActions2().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(error?.localizedDescription)")
+                    if let res = response as? HTTPURLResponse, let data = data {
+                        FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(data.toString)")
+                        FileActions2().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(data.toString)")
                     }
-                    
+
                     return
             }
             FileActions1().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)")
@@ -334,6 +362,9 @@ extension Data {
     
     var toString: String {
         return String(decoding: self, as: UTF8.self)
+    }
+    var toString1: String? {
+        return String(data: self, encoding: .utf8)
     }
     
    

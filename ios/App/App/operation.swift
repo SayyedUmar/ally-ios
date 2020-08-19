@@ -29,8 +29,8 @@ extension AppDelegate {
         }
         
         SwiftEventBus.onMainThread(self, name: "onStartMonitoringLocation") { result in
-            //self.startLocationUpdate()
-            self.callDummyApi(location: nil)
+            self.startLocationUpdate()
+//            self.callDummyApi(location: nil)
             guard let result = result, let userInfo = result.userInfo as? [String : Any] else {return}
             self.person = Person (dict: userInfo)
             print("onStartMonitoringLocation", result)
