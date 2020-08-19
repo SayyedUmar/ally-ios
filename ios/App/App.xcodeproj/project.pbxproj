@@ -20,11 +20,12 @@
 		528C759024D030C3001CA6C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 528C758F24D030C3001CA6C2 /* GoogleService-Info.plist */; };
 		528C759224D2945D001CA6C2 /* MLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528C759124D2945D001CA6C2 /* MLocationManager.swift */; };
 		528C759424D29496001CA6C2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528C759324D29496001CA6C2 /* ViewController.swift */; };
-		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		DD2BCDD82F0F08D3F09E1748 /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1DC374B924E6C3C20089B002 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		1DEAD67E24ED3911009D34D6 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* Ally.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ally.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,7 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
+				DD2BCDD82F0F08D3F09E1748 /* Pods_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +61,7 @@
 		27E2DDA53C4D2A4D1A88CE4A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1DEAD67E24ED3911009D34D6 /* Alamofire.framework */,
 				AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */,
 			);
 			name = Frameworks;
@@ -377,7 +379,7 @@
 				DEVELOPMENT_TEAM = CC748MNR36;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks $(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.scram.mobile.ally.stage;
 				PRODUCT_NAME = Ally;
@@ -399,7 +401,7 @@
 				DEVELOPMENT_TEAM = CC748MNR36;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.scram.mobile.ally.stage;
 				PRODUCT_NAME = Ally;
 				PROVISIONING_PROFILE_SPECIFIER = ALLY_STAGE_PP;

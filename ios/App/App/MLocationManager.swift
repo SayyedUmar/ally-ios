@@ -8,7 +8,8 @@
 import Foundation
 import CoreLocation
 import UIKit
-
+import Alamofire
+import SwiftyJSON
 
 class MLocationManager: NSObject {
     
@@ -54,18 +55,40 @@ extension AppDelegate {
         
     }
     
-    func callDummyApi (location: CLLocation) {
-        let coord = location.coordinate
-        let url = URL(string: "https://jsonplaceholder.typicode.com/todos/1")!
+    func callDummyApi (location: CLLocation?) {
+//        let coord = location.coordinate
+//        let url = URL(string: "https://jsonplaceholder.typicode.com/todos/1")!
+        let url = URL(string: "http://localhost:8004/testAPI")!
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let data = data, error == nil
-                else { return }
+                let data = data, error == nil   
+                else {
+                    print("error received", error?.localizedDescription)
+                    return }
             let dic = data.toJSON()
-            
-            FileActions().writeToFile("\(dic?["title"]!) Lat -\(coord.latitude) | Long - \(coord.longitude)")
+            print("response received",data.toJSON())
+            //FileActions().writeToFile("\(dic?["title"]!) Lat -\(coord.latitude) | Long - \(coord.longitude)")
             
         }.resume()
+        
+         Alamofire.request("http://localhost:8004/testAPI",method: .get, parameters: [:], headers: [:])
+        //         .validate(contentType: [contentType])
+                   .responseJSON { (response) in
+                       
+               if let value = response.data {
+                   let json = JSON(value)
+                   print("Response: ", json)
+               } else {
+               }
+       }
+//        AF.request(url).responseData { response in
+//            switch response.result {
+//            case .success:
+//                print("Validation Successful")
+//            case let .failure(error):
+//                print(error)
+//            }
+//        }
     }
     func callServerAPI (location: CLLocation) {
                 
@@ -90,6 +113,7 @@ extension AppDelegate {
         request.httpBody = body
         print("location- ", location.coordinate.latitude, location.coordinate.longitude)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,

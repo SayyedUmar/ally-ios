@@ -1,8 +1,10 @@
 import UIKit
 import Capacitor
 import BackgroundTasks
-import Firebase
+import FirebaseCore
+import FirebaseInstanceID
 import CoreLocation
+import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -15,9 +15,16 @@ def capacitor_pods
 end
 
 target 'App' do
+  use_frameworks!
   capacitor_pods
+  pod 'Firebase/Core'
   pod 'Firebase/Messaging'
   pod 'SwiftLocation', '~> 4.2.0'
   pod 'SwiftEventBus', :tag => '5.0.1', :git => 'https://github.com/cesarferreira/SwiftEventBus.git'
+#  pod 'Alamofire', '~> 5.2'
+#  pod 'AlamofireImage', '~> 4.1'
+  pod 'Alamofire', '~> 4.4'
+  pod 'AlamofireImage', '~> 3.1'
+  pod 'SwiftyJSON'
   # Add your Pods here
 end
