@@ -231,13 +231,13 @@ extension AppDelegate {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
                 case .notDetermined, .restricted, .denied:
-                    return "Not accessible"
+                    return "NotAuthorised"
                 case .authorizedWhenInUse:
-                    return "authorized When In Use"
+                    return "AuthorizedWhenInUse"
                 case .authorizedAlways:
-                    return "authorized Always"
+                    return "AuthorizedAlways"
                 @unknown default:
-                    return "unknown error"
+                    return "Unknown"
                 }
             }
         else {
