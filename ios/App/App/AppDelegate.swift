@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        self.callDummyApi1()
         Timer.scheduledTimer(withTimeInterval: 1.0 * 60, repeats: true) { _ in
             
-            FileActions().writeToFile("Current location service status is - \(self.getLocationSerStatus())")
+            FileActions().writeToFile("location - \(self.getLocationSerStatus())")
 //            for i in 0...10 {
 //                print("printing Log : \(i)")
 //            }
