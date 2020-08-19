@@ -36,6 +36,8 @@ extension AppDelegate {
     }
     
     func requestPermission () {
+        
+        //self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.requestAlwaysAuthorization()
         //locationManager.startUpdatingLocation()
         //self.locationManager.requestWhenInUseAuthorization()
@@ -80,9 +82,9 @@ extension AppDelegate {
         #endif
         print("device is real")
         
-        FileActions1().writeToFile("location service status = \(getLocationSerStatus()) ,location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
+        FileActions1().writeToFile("locatio=\(getLocationSerStatus()) ,location captued internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
         
-        FileActions2().writeToFile("location service status = \(getLocationSerStatus()),location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString.replacingOccurrences(of: "\"", with: "'"))")
+        FileActions2().writeToFile("location=\(getLocationSerStatus()),location captued internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString.replacingOccurrences(of: "\"", with: "'"))")
         
         let url = URL(string: "https://allymobileapigateway.scramstage.com/api/v1/NativeMobile/Location")!
         var request = URLRequest(url: url)
