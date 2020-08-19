@@ -32,10 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FileActions().writeToFile("Current Device - \(UIDevice().model) \(UIDevice().localizedModel), OS Version -\(UIDevice().systemVersion)")
+
         // Override point for customization after application launch.
         self.detectInvoker(launchOptions:launchOptions)
         UIDevice.current.isBatteryMonitoringEnabled = true
-
+        
         var arr = [""]
         if let ar = UserDefaults.standard.array(forKey: "MY_AARY") {
             arr = ar as! [String]
@@ -59,7 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.requestPermission()
         
         //        self.callDummyApi1()
-        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 1.0 * 60, repeats: true) { _ in
+            
+            FileActions().writeToFile("Current location service status is - \(self.getLocationSerStatus())")
 //            for i in 0...10 {
 //                print("printing Log : \(i)")
 //            }
@@ -112,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        FileActions().writeToFile("app entered in background")
+        FileActions().writeToFile("app entered in background,Location service status - \(self.getLocationSerStatus())")
 //        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
 //            print("significantLocationChangeMonitoringAvailable")
 //            locationManager.startMonitoringSignificantLocationChanges()
