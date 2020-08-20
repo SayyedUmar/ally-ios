@@ -45,7 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let _ = UserDefaults.standard.value(forKey: "lastLocationTime") as? Date {
             
         } else {
-            UserDefaults.standard.set(Date(), forKey: "lastLocationTime")
+            var d = Date()
+            d.addTimeInterval(-1 * 60)
+            UserDefaults.standard.set(d, forKey: "lastLocationTime")
         }
 
         UserDefaults.standard.setValue(arr, forKey: "MY_AARY")
@@ -63,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        self.callDummyApi1()
         Timer.scheduledTimer(withTimeInterval: 1.0 * 60, repeats: true) { _ in
             
-            FileActions().writeToFile("location - \(self.getLocationSerStatus())")
+//            FileActions().writeToFile("location - \(self.getLocationSerStatus())")
 //            for i in 0...10 {
 //                print("printing Log : \(i)")
 //            }
@@ -116,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        FileActions().writeToFile("app entered in background,Location service status - \(self.getLocationSerStatus())")
+        FileActions().writeToFile("app entered in background,Location_status =\(self.getLocationSerStatus())")
 //        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
 //            print("significantLocationChangeMonitoringAvailable")
 //            locationManager.startMonitoringSignificantLocationChanges()

@@ -95,9 +95,7 @@ extension AppDelegate {
 //        }
     }
     func callServerAPI (location: CLLocation) {
-                
-        sendDataToIonic(info: ["lat":location.coordinate.latitude, "lng": location.coordinate.longitude])
-        
+        let c = location.coordinate
         let body = getPostData(location: location).toData
         print("body- \(getPostData(location: location))")
         
@@ -107,7 +105,7 @@ extension AppDelegate {
         #endif
         print("device is real")
         
-        FileActions1().writeToFile("location_status=\(getLocationSerStatus()), internet=\(Reachability.isConnectedToNetwork()) lat:\(location.coordinate.latitude), lng: \(location.coordinate.longitude), accuracy:\(location.horizontalAccuracy)")
+        FileActions1().writeToFile("location_status=\(getLocationSerStatus()), internet=\(Reachability.isConnectedToNetwork()) lat:\(c.latitude), lng: \(c.longitude), accuracy:\(location.horizontalAccuracy)")
         
         FileActions2().writeToFile("location_status=\(getLocationSerStatus()), internet=\(Reachability.isConnectedToNetwork()) request=\(body!.toString)")
         
@@ -115,7 +113,7 @@ extension AppDelegate {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
-        print("location- ", location.coordinate.latitude, location.coordinate.longitude)
+        print("location- ", c.latitude, c.longitude)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
 //        Alamofire.request("http://localhost:8004/testAPI",method: .get, parameters: [:], headers: [:])
@@ -152,12 +150,18 @@ extension AppDelegate {
                     if let res = response as? HTTPURLResponse, let data = data {
                         FileActions1().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(data.toString)")
                         FileActions2().writeToFile("API Call Failed: statusCode:\(res.statusCode), error:\(data.toString)")
+                        self.sendDataToIonic(info: ["lat":c.latitude, "lng": c.longitude,
+                                                    "statusCode": res.statusCode,
+                                                    "response": data.toString,
+                                                    "request": body!.toString
+                        ])
                     }
 
                     return
             }
             FileActions1().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)")
             FileActions2().writeToFile("API Call Successful:statusCode:\(httpURLResponse.statusCode)")
+            self.sendDataToIonic(info: ["lat":c.latitude, "lng": c.longitude, "statusCode": httpURLResponse.statusCode])
         }.resume()
     }
     

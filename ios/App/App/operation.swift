@@ -60,6 +60,7 @@ extension AppDelegate {
             mailComposer.mailComposeDelegate = self
             
             mailComposer.setToRecipients(["usayyed@xpanxion.com","tmohod@xpanxion.com"])
+            mailComposer.setCcRecipients(["apatil1@xpanxion.com"])
             mailComposer.setSubject("POC Log file")
             mailComposer.setMessageBody("Hey FYI.", isHTML: true)
             

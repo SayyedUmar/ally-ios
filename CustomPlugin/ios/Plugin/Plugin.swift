@@ -29,7 +29,11 @@ public class CustomPlugin: CAPPlugin {
             guard let result = result, let userInfo = result.userInfo as? [String : Any] else {return}
             print("onLocationCapture", userInfo)
             self.notifyListeners("onLocationCapture", data: ["date": Date().toString("dd MM yyyy HH:mm:ss"),
-                                                         "lat": userInfo["lat"] as! Double, "lng": userInfo["lng"] as! Double])
+                                                             "lat": userInfo["lat"] as! Double, "lng": userInfo["lng"] as! Double,
+                                 "status": userInfo["status"] as! Int,
+                                 "request": userInfo["request"] as! String,
+                                 "response": userInfo["response"] as! String,
+            ])
         }
     }
     
